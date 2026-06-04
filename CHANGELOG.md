@@ -13,6 +13,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - **PB2 — `LGCM`**: property-based Latent Gaussian Categorical Model using one
   latent fGn stream per symbol and calibrated argmax offsets for marginal control.
   Hurst parameter `H ∈ (0.5, 1.0)`.
+- **PB3 — `WaveletMarkov`**: property-based multiscale Haar-like latent driver
+  selecting Markov regimes with per-regime transition matrices.
 - **MB1 — `LAMP`**: model-based Linear-Additive Markov Process with power-law
   history weights `wₖ ∝ k^{-(1+β)}`. ACF decay exponent `β ∈ (0, 1)`. O(n·d) time.
 - **MB2 — `OnOffMarkov`**: model-based heavy-tailed regime-switching Markov chain
@@ -28,6 +30,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Full test suite covering output correctness, argument validation, statistical
   properties, and INC round-trip.
 - Documenter.jl documentation with API reference.
+- Documentation motivations for estimator testing, excess entropy and entropy-rate
+  experiments, non-language LLM-style sequence training, context-length diagnostics,
+  anomaly/change detection, and privacy-preserving simulation.
 - GitHub Actions CI: tests on Julia 1.10 and latest stable.
 
 ### Changed

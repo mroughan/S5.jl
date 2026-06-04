@@ -91,6 +91,34 @@ function _build_metadata(gen::LGCM, n::Int, created::String)
     )
 end
 
+function _build_metadata(gen::WaveletMarkov, n::Int, created::String)
+    k   = length(gen.alphabet)
+    R   = length(gen.transition_matrices)
+    alp = join(string.(gen.alphabet), ",")
+    rw  = join(string.(round.(gen.regime_weights; digits = 8)), ",")
+    Dict(
+        "title"     => "S5.jl synthetic LRD symbol sequence",
+        "package"   => "S5",
+        "version"   => string(pkgversion(@__MODULE__)),
+        "created"   => created,
+        "n"         => n,
+        "generator" => "WaveletMarkov",
+        "method"    => "PB3",
+        "generator_params" => Dict(
+            "H"              => string(gen.H),
+            "alphabet_size"  => k,
+            "alphabet"       => alp,
+            "n_regimes"      => R,
+            "regime_weights" => rw,
+            "cascade_depth"  => gen.cascade_depth,
+        ),
+        "columns" => Dict(
+            "index"  => "time index (1-based)",
+            "symbol" => "generated symbol from the alphabet",
+        ),
+    )
+end
+
 function _build_metadata(gen::LAMP, n::Int, created::String)
     k   = length(gen.alphabet)
     alp = join(string.(gen.alphabet), ",")

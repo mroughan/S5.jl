@@ -69,6 +69,27 @@ import IncCSV
         end
     end
 
+    @testset "WaveletMarkov round-trip" begin
+        mktempdir() do dir
+            P1 = [0.9 0.1; 0.2 0.8]
+            P2 = [0.3 0.7; 0.6 0.4]
+            g    = WaveletMarkov(0.8, [:a, :b], [P1, P2]; regime_weights = [0.4, 0.6])
+            seq  = generate(g, 80; rng = StableRNG(25))
+            path = joinpath(dir, "pb3.inc")
+            save_sequence(path, seq, g)
+
+            inc  = IncCSV.readinc(path)
+            meta = IncCSV.metadata(inc)
+            @test meta["generator"] == "WaveletMarkov"
+            @test meta["method"]    == "PB3"
+            @test meta["n"]         == 80
+
+            gp = meta["generator_params"]
+            @test gp["H"] == "0.8"
+            @test gp["n_regimes"] == 2
+        end
+    end
+
     @testset "OnOffMarkov round-trip" begin
         mktempdir() do dir
             P1 = [0.9 0.1; 0.2 0.8]

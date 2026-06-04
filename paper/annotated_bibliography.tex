@@ -114,6 +114,24 @@ and recurrence-time behaviour. It helps justify the use of count-process and
 return-time definitions for non-numerical sequences where ordinary numerical ACF
 methods are not directly applicable.
 
+\subsection{Entropy, Predictability, and Information Storage}
+
+\paragraph{Crutchfield and Feldman (2003).}
+\emph{Regularities unseen, randomness observed: Levels of entropy convergence.}
+This paper is a core reference for excess entropy and entropy-rate convergence.
+It frames excess entropy as stored predictive information in a process, making it
+a natural quantity to test on controlled LRD symbolic sequences. S5.jl can create
+cases where local Markov structure and long-range structure are varied
+separately, which is exactly the kind of setting needed to probe entropy-rate
+convergence.
+
+\paragraph{Bialek, Nemenman, and Tishby (2001).}
+\emph{Predictability, complexity, and learning.}
+This work connects prediction, complexity, and information in sequences. It is
+useful background for studying how much long-range structure a learner can
+extract from finite data, and for interpreting excess entropy-like quantities as
+predictive information.
+
 \subsection{Machine Learning Motivation}
 
 \paragraph{Belletti, Beutel, Jain, and Chi (2018).}
@@ -130,3 +148,17 @@ This paper is one of the direct motivations for studying LRD in language and
 human behavioural sequences. It connects empirical LRD measurement to model
 design, reinforcing S5.jl's role as a controllable data source for later
 estimator and learning experiments.
+
+\paragraph{Vaswani et al. (2017).}
+\emph{Attention is all you need.}
+The transformer architecture made long-context neural sequence modelling central
+to modern machine learning. Although S5.jl is not language-specific, its symbolic
+generators can create non-language sequences with controlled long-context
+dependencies for training and stress-testing transformer-style models.
+
+\paragraph{Tay et al. (2021).}
+\emph{Long Range Arena: A benchmark for efficient transformers.}
+Long Range Arena motivates synthetic and semi-synthetic tasks designed to test
+long-context modelling. S5.jl extends this spirit to LRD categorical processes
+where statistical structure, alphabet, marginal distribution, and local Markov
+structure can be controlled.

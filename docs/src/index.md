@@ -3,9 +3,9 @@
 **Self-Similar Symbols Sequence Synthesis**
 
 S5.jl generates Long-Range Dependent (LRD) sequences of categorical
-(non-numerical) symbols. Its primary use is producing ground-truth test data
-for LRD estimation algorithms applied to symbol sequences such as natural
-language, genomic data, or event logs.
+(non-numerical) symbols. It produces controllable synthetic data for LRD
+estimator tests, information-theoretic experiments, and LLM-style neural
+sequence models trained on challenging non-language symbolic streams.
 
 This package implements Task 1 of the ARC Discovery Grant project *"Analysis
 and Synthesis of Long-Range Structure in Non-Numerical Time Series"*
@@ -26,20 +26,24 @@ seq1 = generate(g1, 10_000; rng)
 g2 = LGCM(0.8, [:a, :b, :c], [0.2, 0.3, 0.5])
 seq2 = generate(g2, 10_000; rng)
 
-# Model-based: Linear-Additive Markov Process
-g3 = LAMP(0.5, [:a, :b, :c], [0.2, 0.3, 0.5]; d = 500, epsilon = 0.02)
-seq3 = generate(g3, 10_000; rng)
-
-# Model-based: heavy-tailed regime-switching Markov chain
+# Property-based: multiscale driver + Markov regimes
 P1 = [0.9 0.1; 0.2 0.8]
 P2 = [0.3 0.7; 0.6 0.4]
-Q = [0.2 0.8; 0.8 0.2]
-g4 = OnOffMarkov(1.5, [:a, :b], [P1, P2], Q)
+g3 = WaveletMarkov(0.8, [:a, :b], [P1, P2])
+seq3 = generate(g3, 10_000; rng)
+
+# Model-based: Linear-Additive Markov Process
+g4 = LAMP(0.5, [:a, :b, :c], [0.2, 0.3, 0.5]; d = 500, epsilon = 0.02)
 seq4 = generate(g4, 10_000; rng)
 
-# Model-based: Fractal Symbol Sequence  (H = (3-α)/2 = 0.75)
-g5 = FSS(1.5, [:a, :b, :c]; rates = [2.0, 3.0, 5.0])
+# Model-based: heavy-tailed regime-switching Markov chain
+Q = [0.2 0.8; 0.8 0.2]
+g5 = OnOffMarkov(1.5, [:a, :b], [P1, P2], Q)
 seq5 = generate(g5, 10_000; rng)
+
+# Model-based: Fractal Symbol Sequence  (H = (3-α)/2 = 0.75)
+g6 = FSS(1.5, [:a, :b, :c]; rates = [2.0, 3.0, 5.0])
+seq6 = generate(g6, 10_000; rng)
 
 empirical_marginal(seq1, g1.alphabet)
 
@@ -53,6 +57,7 @@ save_sequence("seq_pb1.inc", seq1, g1)
 |-----|---------------|----------------------------------------|----------------------------|-----------------|
 | PB1 | `SpectralFGN` | Spectral $1/f^\alpha$ shaping          | Poor (set by quantization) | $O(n \log n)$  |
 | PB2 | `LGCM`        | Latent fGn streams + argmax            | Offset-calibrated marginals | $O(n \cdot k \cdot I)$ |
+| PB3 | `WaveletMarkov` | Multiscale driver + Markov regimes   | Per-regime Markov matrices | $O(n \log n + n \cdot k)$ |
 | MB1 | `LAMP`        | Power-law history weights              | Weight tensor              | $O(n \cdot d)$ |
 | MB2 | `OnOffMarkov` | Heavy-tailed regime sojourns           | Per-regime Markov matrices | $O(n \cdot k)$ |
 | MB3 | `FSS`         | Pareto renewal process per symbol      | Poor (independent streams) | $O(n \cdot k)$ |
@@ -65,6 +70,7 @@ All three generators expose a Hurst parameter $H \in (1/2, 1)$:
 |---------------|------------------|------------------------|
 | `SpectralFGN` | `H`              | direct                 |
 | `LGCM`        | `H`              | direct                 |
+| `WaveletMarkov` | `H`            | latent-driver target   |
 | `LAMP`        | `beta` ($\beta$) | $H = (2 - \beta) / 2$ |
 | `OnOffMarkov` | `alpha` ($\alpha$) | nominal $H = (3 - \alpha) / 2$ |
 | `FSS`         | `alpha` ($\alpha$) | $H = (3 - \alpha) / 2$ |
@@ -78,6 +84,7 @@ entries are rejected because they make empirical frequency tables ambiguous.
 |------|------------------|-------------------------|
 | `SpectralFGN` | direct `marginal`; rank binning gives integer counts as close as possible to target | none |
 | `LGCM` | direct `marginal`; calibrated latent offsets | none |
+| `WaveletMarkov` | aggregate stationary marginal implied by regimes | per-regime bigram matrices |
 | `LAMP` | direct `marginal` mixed through `epsilon`; larger `epsilon` improves marginal control | history-weighted dependence, not arbitrary bigrams |
 | `OnOffMarkov` | aggregate stationary marginal implied by regimes | per-regime bigram matrices |
 | `FSS` | asymptotic `rates / sum(rates)` | none |
@@ -87,6 +94,19 @@ Reproducible controllability studies live in `validation/`, for example:
 ```julia
 julia --project=. validation/marginal_control.jl
 ```
+
+## Motivations
+
+S5.jl is intended for several related research uses:
+
+- testing NN-LRD estimators on sequences with known generator settings;
+- probing excess entropy rate, entropy-rate convergence, and other
+  information-theoretic summaries of long-memory symbolic data;
+- creating non-language but language-like long-context sequences for training and
+  stress-testing LLM-style neural networks;
+- separating local bigram/trigram competence from genuine long-context modelling;
+- studying anomaly detection, change detection, and synthetic privacy-preserving
+  categorical data with realistic burstiness.
 
 ## INC output format
 

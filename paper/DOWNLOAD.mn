@@ -98,6 +98,18 @@ Items are listed here because they have not yet been downloaded into the reposit
     Journal of Applied Probability, 44(4), 1047-1055.
   - DOI/search: article title.
 
+- [ ] `crutchfield_feldman_2003_entropy_convergence.pdf`
+  - Crutchfield, J. P., & Feldman, D. P. (2003).
+    "Regularities unseen, randomness observed: Levels of entropy convergence."
+    Chaos, 13(1), 25-54.
+  - DOI/search: `10.1063/1.1530990`
+
+- [ ] `bialek_nemenman_tishby_2001_predictability_complexity_learning.pdf`
+  - Bialek, W., Nemenman, I., & Tishby, N. (2001).
+    "Predictability, complexity, and learning."
+    Neural Computation, 13(11), 2409-2463.
+  - DOI/search: `10.1162/089976601753195969`
+
 - [ ] `belletti_beutel_jain_chi_2018_factorized_rnn_lrd.pdf`
   - Belletti, F., Beutel, A., Jain, S., & Chi, E. (2018).
     "Factorized recurrent neural architectures for longer range dependence."
@@ -110,3 +122,17 @@ Items are listed here because they have not yet been downloaded into the reposit
     RNNs."
     KDD '19.
   - DOI/search: `10.1145/3292500.333094 long range dependence language user behavior`
+
+- [ ] `vaswani_et_al_2017_attention_is_all_you_need.pdf`
+  - Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L.,
+    Gomez, A. N., Kaiser, L., & Polosukhin, I. (2017).
+    "Attention is all you need."
+    NeurIPS.
+  - Source/search: NeurIPS proceedings or arXiv `1706.03762`.
+
+- [ ] `tay_et_al_2021_long_range_arena.pdf`
+  - Tay, Y., Dehghani, M., Abnar, S., Shen, Y., Bahri, D., Pham, P.,
+    Rao, J., Yang, L., Ruder, S., & Metzler, D. (2021).
+    "Long Range Arena: A benchmark for efficient transformers."
+    ICLR.
+  - Source/search: OpenReview Long Range Arena or arXiv.

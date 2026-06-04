@@ -7,6 +7,7 @@ using S5
     include("test_utils.jl")
     include("test_pb1.jl")
     include("test_pb2.jl")
+    include("test_pb3.jl")
     include("test_mb1.jl")
     include("test_mb2.jl")
     include("test_mb3.jl")

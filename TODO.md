@@ -20,6 +20,7 @@ Implemented:
 - [x] Common generator interface: `generate(g, n; rng)`.
 - [x] `SpectralFGN` (PB1): spectral fGn plus quantization.
 - [x] `LGCM` (PB2): latent Gaussian categorical model.
+- [x] `WaveletMarkov` (PB3): multiscale latent driver with Markov regimes.
 - [x] `LAMP` (MB1): Linear-Additive Markov Process.
 - [x] `OnOffMarkov` (MB2): heavy-tailed regime-switching Markov chain.
 - [x] `FSS` (MB3): Fractal Symbol Sequence via independent Pareto renewal streams.
@@ -32,7 +33,6 @@ Implemented:
 
 Not yet implemented:
 
-- [ ] PB3: Wavelet-cascade driving a Markov state machine.
 - [ ] Benchmark suite.
 - [x] Initial simulation studies of marginal controllability.
 - [ ] Expanded simulation studies of local-structure controllability.
@@ -60,6 +60,7 @@ that collection with the same element type.
 
 - [x] `SpectralFGN(H, alphabet, marginal = uniform)`.
 - [x] `LGCM(H, alphabet, marginal = uniform)`.
+- [x] `WaveletMarkov(H, alphabet, transition_matrices; regime_weights = uniform)`.
 - [x] `LAMP(beta, alphabet, marginal = uniform; d = 1000)`.
 - [x] `OnOffMarkov(alpha, alphabet, transition_matrices, switching_matrix; L_min = 1.0)`.
 - [x] `FSS(alpha, alphabet; rates = ones(k), x_min = 1.0)`.
@@ -80,6 +81,8 @@ Current behavior:
   as close as possible to the requested marginal.
 - `LGCM`: accepts `marginal`; latent offsets are calibrated on the generated sample
   to approximate the target marginal.
+- `WaveletMarkov`: aggregate marginal is implied by regime weights and per-regime
+  stationary distributions.
 - `LAMP`: accepts `marginal` and mixes it into the history-based probabilities through
   `epsilon`. Larger `epsilon` improves finite-sample marginal control but weakens
   history dependence.
@@ -125,12 +128,12 @@ Current capability:
   latent Gaussian path and quantization thresholds.
 - `LGCM`: no direct bigram/trigram control. Local structure is induced by the latent
   fGn streams and argmax mapping.
+- `WaveletMarkov`: direct per-regime bigram control through Markov transition
+  matrices driven by a multiscale latent regime process.
 - `LAMP`: controls dependence through history weights, but not arbitrary user-specified
   bigram/trigram probabilities in the current implementation.
 - `OnOffMarkov`: direct per-regime bigram control through Markov transition matrices.
 - `FSS`: no direct bigram/trigram control because symbol streams are independent.
-- `PB3`: natural next place to support Markov transition matrices driven by a latent
-  wavelet cascade.
 
 Tasks:
 
@@ -214,13 +217,13 @@ Implemented as `OnOffMarkov`.
 
 ### PB3: Wavelet-Cascade Driving a Markov State Machine
 
-Implement after the local-structure specification is settled.
+Implemented as `WaveletMarkov`.
 
-- [ ] Reuse `MarkovSpec` or equivalent transition-matrix interface.
-- [ ] Generate a latent LRD driver.
-- [ ] Map driver values to regimes.
-- [ ] Emit via regime-specific transition matrices.
-- [ ] Test controllability of bigrams conditional on regime and in aggregate.
+- [x] Reuse transition-matrix interface.
+- [x] Generate a latent LRD driver.
+- [x] Map driver values to regimes.
+- [x] Emit via regime-specific transition matrices.
+- [x] Test controllability of bigrams conditional on regime and in aggregate.
 
 ### PB2: Latent Gaussian Categorical Model
 

@@ -3,9 +3,10 @@
 **Self-Similar Symbols Sequence Synthesis**
 
 S5.jl is a Julia package for generating Long-Range Dependent (LRD) sequences of
-non-numerical (categorical/symbolic) data. It provides ground-truth synthetic sequences
-for use in testing and benchmarking LRD estimation algorithms applied to non-numerical
-time series.
+non-numerical (categorical/symbolic) data. It provides controllable synthetic
+sequences for testing LRD estimators, probing information-theoretic quantities,
+and training or stress-testing sequence models on non-language data with
+language-like long context.
 
 This package implements Task 1 of the ARC Discovery Grant project *"Analysis and
 Synthesis of Long-Range Structure in Non-Numerical Time Series"* (Roughan & Willinger).
@@ -33,8 +34,7 @@ media), yet almost all synthesis tools target numerical data. S5.jl fills that g
 
 ## Implemented Methods
 
-Five synthesis methods are currently implemented. Additional methods from the
-grant proposal remain on the roadmap.
+All six synthesis methods from the current S5 roadmap are implemented.
 
 ### Property-Based Methods
 
@@ -45,7 +45,7 @@ The LRD property is inherited from the numerical layer.
 |----|------|--------|---------------|---------------------|------------|--------|
 | PB1 | Spectral fGn + quantization | Implemented | Spectral $1/f^\alpha$ shaping | Poor (set by quantization) | $O(n \log n)$ | No |
 | PB2 | Latent Gaussian categorical (LGCM) | Implemented | fGn streams + argmax | Via calibrated offsets | $O(n k I)$ | No |
-| PB3 | Wavelet-cascade + Markov state machine | Planned | Wavelet coefficient cascade | Markov transition matrices | $O(n)$ | Partial |
+| PB3 | Wavelet-cascade + Markov state machine | Implemented | Multiscale Haar-like cascade | Markov transition matrices | $O(n \log n + n k)$ | Partial |
 
 **PB1 — Spectral fGn + quantization.**
 Fractional Gaussian noise with Hurst parameter $H$ is synthesised using the fast
@@ -63,11 +63,11 @@ structure. This is a practical finite-sample approximation to the latent Gaussia
 categorical model of Gal, Chen & Ghahramani (ICML 2015).
 
 **PB3 — Wavelet-cascade driving a Markov state machine.**
-A latent LRD intensity signal is generated via the wavelet synthesis method of Roughan,
-Veitch & Abry (2001). This signal controls which row of a symbol transition matrix is
-active at each step, so the state machine enforces prescribed bigram/trigram statistics
-while the wavelet cascade injects LRD at all scales. Provides simultaneous control of
-both $H$ and short-range structure at $O(n)$ cost.
+A latent multiscale Haar-like driver controls which Markov regime is active at each
+step. Each regime has its own symbol transition matrix, so local bigram structure can
+be prescribed while the latent cascade injects persistence across scales. This is a
+practical implementation of the wavelet/state-machine idea in Roughan, Veitch & Abry
+(2001), with the full calibrated wavelet variant left as a research extension.
 
 ---
 
@@ -125,6 +125,7 @@ alphabet)` provide lightweight checks for simulated data.
 |------|----------|------------------|------------------------|
 | `SpectralFGN` | explicit `alphabet` | direct `marginal`; rank binning gives near-exact finite-sample counts | no direct control |
 | `LGCM` | explicit `alphabet` | direct `marginal`; calibrated latent offsets | no direct control |
+| `WaveletMarkov` | explicit `alphabet` | aggregate stationary marginal implied by regimes | direct per-regime bigram matrices |
 | `LAMP` | explicit `alphabet` | direct `marginal` mixed through `epsilon`; larger `epsilon` improves marginal control but weakens history dependence | no arbitrary target table |
 | `OnOffMarkov` | explicit `alphabet` | aggregate stationary marginal implied by regimes | direct per-regime bigram matrices |
 | `FSS` | explicit `alphabet` | `rates / sum(rates)` asymptotically | no direct control |
@@ -140,15 +141,31 @@ intended for a future separate estimator package.
 
 ---
 
-## Implementation Priority
+## Motivations
 
-Methods are implemented in the following order:
+S5.jl is useful beyond basic generator benchmarking:
 
-1. **PB1** — fastest baseline; easiest to validate against known $H$ via spectral estimators.
-2. **MB1** — cleanest finite-state theory; already demonstrated on text corpora.
-3. **MB3** — novel FSS contribution that distinguishes this project scientifically.
-4. **PB2 and MB2** — additional marginal and local-structure controls.
-5. **PB3** — follows once wavelet-regime coupling is specified.
+- **Estimator testing:** generate labelled NN-LRD sequences where alphabet, marginal
+  distribution, local structure, and nominal LRD mechanism are known.
+- **Information-theoretic experiments:** create controlled cases for ideas such as
+  excess entropy rate, entropy-rate convergence, and the gap between local and
+  long-range predictability in LRD processes.
+- **Non-language sequence modelling:** train or stress-test LLM-style neural sequence
+  models on symbolic data that is not text, such as event logs, vulnerability classes,
+  genomic symbols, workflow traces, or synthetic protocol states.
+- **Context-length diagnostics:** test whether models exploit genuinely long context
+  rather than only short-range bigram/trigram cues.
+- **Anomaly and change-detection studies:** create controlled shifts in marginal,
+  local Markov structure, regime persistence, or long-range behaviour.
+- **Privacy-preserving simulation:** produce synthetic categorical sequences with
+  realistic burstiness without copying a sensitive corpus.
+
+---
+
+## Implementation Status
+
+Implemented methods: `SpectralFGN`, `LGCM`, `WaveletMarkov`, `LAMP`,
+`OnOffMarkov`, and `FSS`.
 
 ---
 

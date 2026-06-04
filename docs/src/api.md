@@ -19,6 +19,7 @@ save_sequence
 ```@docs
 SpectralFGN
 LGCM
+WaveletMarkov
 ```
 
 ## Model-based generators

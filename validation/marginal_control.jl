@@ -54,6 +54,7 @@ function run_marginal_control(; ns = (1_000, 5_000),
     factories = [
         ("SpectralFGN", (p, alphabet) -> SpectralFGN(0.8, alphabet, p)),
         ("LGCM", (p, alphabet) -> LGCM(0.8, alphabet, p; calibration_iters = 8)),
+        ("WaveletMarkov", (p, alphabet) -> _iid_wavelet_markov(p, alphabet)),
         ("LAMP", (p, alphabet) -> LAMP(0.5, alphabet, p; d = 200, epsilon = 0.05)),
         ("OnOffMarkov", (p, alphabet) -> _iid_onoff_markov(p, alphabet)),
         ("FSS", (p, alphabet) -> FSS(1.5, alphabet; rates = p)),
@@ -78,6 +79,12 @@ function run_marginal_control(; ns = (1_000, 5_000),
     end
 
     return rows
+end
+
+function _iid_wavelet_markov(p, alphabet)
+    k = length(alphabet)
+    P = repeat(reshape(p, 1, k), k, 1)
+    WaveletMarkov(0.8, alphabet, [P, P]; regime_weights = [0.5, 0.5])
 end
 
 function _iid_onoff_markov(p, alphabet)

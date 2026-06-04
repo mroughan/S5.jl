@@ -12,6 +12,7 @@ symbols for use as ground-truth test data in LRD estimation studies.
 |-----|---------------|----------------------------------------|
 | PB1 | `SpectralFGN` | Spectral fGn synthesis + quantization  |
 | PB2 | `LGCM`        | Latent Gaussian categorical model      |
+| PB3 | `WaveletMarkov` | Multiscale driver + Markov regimes    |
 | MB1 | `LAMP`        | Linear-Additive Markov Process         |
 | MB2 | `OnOffMarkov` | Heavy-tailed regime-switching Markov   |
 | MB3 | `FSS`         | Fractal Symbol Sequence via FRP/FSNP   |
@@ -37,7 +38,7 @@ using Statistics: mean, std
 import IncCSV
 
 export LRDGenerator, generate, save_sequence
-export SpectralFGN, LGCM, LAMP, OnOffMarkov, FSS
+export SpectralFGN, LGCM, WaveletMarkov, LAMP, OnOffMarkov, FSS
 export target_marginal, empirical_marginal, empirical_bigram, empirical_trigram
 export bin_counts, total_variation, rowwise_total_variation
 export validate_transition_matrix, stationary_distribution
@@ -46,6 +47,7 @@ include("interface.jl")
 include("utils.jl")
 include("pb1.jl")
 include("pb2.jl")
+include("pb3.jl")
 include("mb1.jl")
 include("mb2.jl")
 include("mb3.jl")
