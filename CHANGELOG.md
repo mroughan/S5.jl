@@ -1,0 +1,26 @@
+# Changelog
+
+All notable changes to S5.jl are documented here.
+Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+
+## [0.1.0] — 2026-06-04
+
+### Added
+- `LRDGenerator` abstract type and `generate(g, n; rng)` common interface.
+- **PB1 — `SpectralFGN`**: property-based generator using approximate spectral
+  (FFT) synthesis of fractional Gaussian noise followed by quantization to symbols.
+  Hurst parameter `H ∈ (0.5, 1.0)`. O(n log n) time.
+- **MB1 — `LAMP`**: model-based Linear-Additive Markov Process with power-law
+  history weights `wₖ ∝ k^{-(1+β)}`. ACF decay exponent `β ∈ (0, 1)`. O(n·d) time.
+- **MB3 — `FSS`**: model-based Fractal Symbol Sequence via independent
+  Pareto-distributed renewal processes, one per symbol, merged in event-time order.
+  Tail index `α ∈ (1, 2)`, `H = (3−α)/2`. O(n·k) time.
+- `save_sequence(filepath, seq, gen)`: writes generated sequences to INC format
+  (IncCSV.jl) with full provenance metadata (package version, generator type and
+  parameters, creation date).
+- `quantize_to_symbols`: utility for mapping real-valued sequences to symbol
+  alphabets via sample-quantile thresholding.
+- Full test suite covering output correctness, argument validation, statistical
+  properties, and INC round-trip.
+- Documenter.jl documentation with API reference.
+- GitHub Actions CI: tests on Julia 1.10 and latest stable.

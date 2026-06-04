@@ -1,0 +1,17 @@
+name = "S5"
+uuid = "47763e6f-3b8b-4f87-80b6-63f8f1c9da46"
+authors = ["Matthew Roughan <matthew.roughan@adelaide.edu.au>"]
+version = "0.1.0"
+
+[deps]
+Dates   = "ade2ca70-3891-5945-98fb-dc099432e06a"
+FFTW    = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
+IncCSV  = "66f2fdda-89f9-4824-87f0-56b432c695d5"
+Random  = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+
+[compat]
+FFTW   = "1"
+IncCSV = "0.1"
+julia  = "1.10"
+
