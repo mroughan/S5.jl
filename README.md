@@ -130,6 +130,12 @@ alphabet)` provide lightweight checks for simulated data.
 | `OnOffMarkov` | explicit `alphabet` | aggregate stationary marginal implied by regimes | direct per-regime bigram matrices |
 | `FSS` | explicit `alphabet` | `rates / sum(rates)` asymptotically | no direct control |
 
+For regime-driven methods (`WaveletMarkov` and `OnOffMarkov`), symbol-level ACF
+and spectrum diagnostics only see the LRD regime process when regimes have
+different observable stationary symbol distributions. Regimes with identical
+stationary marginals can carry latent long memory while looking nearly
+short-memory to one-hot symbol diagnostics.
+
 Reproducible simulation studies live in `validation/`. For example:
 
 ```julia

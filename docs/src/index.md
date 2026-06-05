@@ -89,6 +89,11 @@ entries are rejected because they make empirical frequency tables ambiguous.
 | `OnOffMarkov` | aggregate stationary marginal implied by regimes | per-regime bigram matrices |
 | `FSS` | asymptotic `rates / sum(rates)` | none |
 
+For `WaveletMarkov` and `OnOffMarkov`, one-hot symbol diagnostics need regimes
+with different stationary symbol distributions. If each regime has the same
+stationary marginal, the latent regime process can be long-memory while the
+symbol-level ACF and spectrum look nearly short-memory.
+
 Reproducible controllability studies live in `validation/`, for example:
 
 ```julia
