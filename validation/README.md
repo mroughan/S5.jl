@@ -36,14 +36,19 @@ julia --project=. validation/lrd_method_diagnostics.jl
 
 This generates 30 sequences of length 100,000 for each implemented method using the
 alphabet `{A,B,C,D,E}`. Sequences are saved as INC files under
-`validation/results/lrd_diagnostics/sequences/`.
+`validation/results/lrd_diagnostics/sequences/`. That sequence directory is ignored
+by Git because these large generated files are reproducible and change whenever the
+diagnostic configuration changes.
 
 For PB3 (`WaveletMarkov`) and MB2 (`OnOffMarkov`), the diagnostic uses five
 observable regimes whose stationary distributions are each biased toward one
-alphabet symbol. The regimes are balanced overall, but the symbol-level
-one-hot ACF and spectrum can see the long-memory regime process. If all regimes
-share the same stationary marginal, these diagnostics can look short-memory even
-when the latent regime process has long-range structure.
+alphabet symbol (`dominance = 0.72`) with moderate within-regime Markov
+persistence (`persistence = 0.35`). The regimes are balanced overall, but the
+symbol-level one-hot ACF and spectrum can see the long-memory regime process.
+MB2 uses `L_min = 50.0` so the heavy-tailed sojourn mechanism is visible at
+`n = 100_000`. If all regimes share the same stationary marginal, these
+diagnostics can look short-memory even when the latent regime process has
+long-range structure.
 
 The script computes the one-hot symbol autocorrelation and power spectrum for each
 sequence, averages across symbols and replicates, and writes:
@@ -53,4 +58,7 @@ sequence, averages across symbols and replicates, and writes:
 - `plot_autocorrelation_logbins.inc`: positive log-binned values used for plotting;
 - `plot_power_spectrum_logbins.inc`: log-binned spectrum values used for plotting.
 
-Log-log SVG plots are written under `validation/results/lrd_diagnostics/plots/`.
+The log-binning code keeps the final bin closed only at its upper edge and sorts
+the binned x-values before writing tables and SVG polylines, so plot x-values are
+strictly increasing within each method. Log-log SVG plots are written under
+`validation/results/lrd_diagnostics/plots/`.

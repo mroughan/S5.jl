@@ -28,6 +28,11 @@ This is a pragmatic PB3 implementation: it uses a Haar-like multiscale driver
 rather than a full calibrated wavelet synthesis package. The important interface
 property is present: local bigram structure is controlled by explicit Markov
 matrices while a multiscale latent process controls regime persistence.
+
+Symbol-level ACF and spectrum diagnostics only see this regime persistence when
+the regimes have different observable stationary symbol distributions. If every
+regime has the same stationary marginal, the latent multiscale process may be
+mostly hidden from one-hot symbol diagnostics.
 """
 struct WaveletMarkov{A, W <: AbstractVector{<:Real}} <: LRDGenerator
     H                   :: Float64

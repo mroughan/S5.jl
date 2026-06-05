@@ -27,6 +27,12 @@ This method is the natural first implementation for user-specified bigram
 structure: each regime has an explicit Markov transition matrix. Aggregate
 marginals and bigrams depend on regime occupancy, switching dynamics, and the
 per-regime stationary distributions.
+
+For finite symbol-level ACF and spectrum diagnostics, use regimes with different
+observable stationary symbol distributions and choose `L_min` large enough for
+heavy-tailed sojourns to appear at the simulated sequence length. Regimes with
+identical stationary marginals can carry latent long memory while looking nearly
+short-memory to one-hot diagnostics.
 """
 struct OnOffMarkov{A} <: LRDGenerator
     alpha               :: Float64

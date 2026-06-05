@@ -48,12 +48,11 @@ The LRD property is inherited from the numerical layer.
 | PB3 | Wavelet-cascade + Markov state machine | Implemented | Multiscale Haar-like cascade | Markov transition matrices | $O(n \log n + n k)$ | Partial |
 
 **PB1 — Spectral fGn + quantization.**
-Fractional Gaussian noise with Hurst parameter $H$ is synthesised using the fast
-spectral method of Paxson (1997) or circulant embedding (Dieker 2004). The real-valued
-output is sorted into $k$ rank bins; each bin maps to one symbol, with integer bin
-counts chosen to match a target marginal distribution as closely as possible for the
-finite sample. This is the simplest approach and serves as the primary validation
-baseline.
+Fractional Gaussian noise with Hurst parameter $H$ is synthesised using the fast,
+approximate spectral method of Paxson (1997). The real-valued output is sorted into
+$k$ rank bins; each bin maps to one symbol, with integer bin counts chosen to match a
+target marginal distribution as closely as possible for the finite sample. This is the
+simplest approach and serves as the primary validation baseline.
 
 **PB2 — Latent Gaussian categorical model (LGCM).**
 A vector of $k$ latent fGn streams is generated, one stream per symbol. At each time
@@ -140,6 +139,7 @@ Reproducible simulation studies live in `validation/`. For example:
 
 ```julia
 julia --project=. validation/marginal_control.jl
+julia --project=. validation/lrd_method_diagnostics.jl
 ```
 
 These studies test controllability of simulated data; LRD-parameter estimation is

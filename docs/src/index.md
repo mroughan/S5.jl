@@ -64,7 +64,8 @@ save_sequence("seq_pb1.inc", seq1, g1)
 
 ### LRD parameters
 
-All three generators expose a Hurst parameter $H \in (1/2, 1)$:
+Each generator exposes either a direct Hurst parameter $H \in (1/2, 1)$ or a
+tail/decay parameter with a nominal relationship to $H$:
 
 | Type          | Input parameter  | Relationship to $H$    |
 |---------------|------------------|------------------------|
@@ -98,7 +99,12 @@ Reproducible controllability studies live in `validation/`, for example:
 
 ```julia
 julia --project=. validation/marginal_control.jl
+julia --project=. validation/lrd_method_diagnostics.jl
 ```
+
+The LRD diagnostic script writes generated sequences and summary tables as INC
+files under `validation/results/lrd_diagnostics/`, and writes log-log SVG plots of
+log-binned one-hot autocorrelation and power-spectrum summaries.
 
 ## Motivations
 

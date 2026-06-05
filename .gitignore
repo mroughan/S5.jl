@@ -6,6 +6,9 @@ Manifest.toml
 /docs/build/
 /docs/site/
 
+# Generated validation data
+/validation/results/lrd_diagnostics/sequences/
+
 # OS
 .DS_Store
 Thumbs.db
