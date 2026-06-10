@@ -3,6 +3,25 @@
 All notable changes to S5.jl are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Added
+- `ARCHITECTURE.md` defining project goals, non-goals, boundaries, stable
+  contracts, and the development pathway.
+- `AGENTS.md` translating the architecture and repository guardrails into a
+  required workflow for AI coding agents.
+- Governance tests that preserve the core development-pathway sections and
+  required agent references.
+- Provenance-labeled local snapshots of the external development guidelines
+  cited by the architecture.
+- Separate GitHub Actions workflows for package tests, Aqua quality checks, JET
+  static analysis, Codecov coverage uploads, and Documenter builds and deployment.
+- Latest-Julia-only Aqua and JET quality scripts under `quality/`.
+
+### Changed
+- Added explicit compatibility bounds for standard-library dependencies so Aqua
+  can enforce complete dependency compatibility metadata.
+
 ## [0.1.0] — 2026-06-04
 
 ### Added

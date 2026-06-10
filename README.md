@@ -2,15 +2,46 @@
 
 **Self-Similar Symbols Sequence Synthesis**
 
+Long-memory is a feature of many natural sequences, closely relate to statistical self-similarity. In the past, numerical sequences starting with the size of Nile river floods have been the main topic of study. But there are many domains where there are (hypothesised) long-memory sequences that are non-numerical, symbolic sequences. For instance: human writing, DNA, and so forth.
+
 S5.jl is a Julia package for generating Long-Range Dependent (LRD) sequences of
 non-numerical (categorical/symbolic) data. It provides controllable synthetic
 sequences for testing LRD estimators, probing information-theoretic quantities,
 and training or stress-testing sequence models on non-language data with
 language-like long context.
 
-This package implements Task 1 of the ARC Discovery Grant project *"Analysis and
-Synthesis of Long-Range Structure in Non-Numerical Time Series"* (Roughan & Willinger).
+---
 
+## Motivations
+
+S5.jl is useful beyond basic generator benchmarking:
+
+- **Estimator testing:** generate labelled NN-LRD (NonNumerical LRD) sequences where alphabet, marginal
+  distribution, local structure, and nominal LRD mechanism are known.
+
+- **Information-theoretic experiments:** create controlled cases for ideas such as
+  excess entropy rate, entropy-rate convergence, and the gap between local and
+  long-range predictability in LRD processes.
+
+- **Non-language sequence modelling:** train or stress-test LLM-style neural sequence
+  models on symbolic data that is not text, such as event logs, vulnerability classes,
+  genomic symbols, workflow traces, or synthetic protocol states.
+
+- **Context-length diagnostics:** test whether models exploit genuinely long context
+  rather than only short-range bigram/trigram cues.
+
+- **Anomaly and change-detection studies:** create controlled shifts in marginal,
+  local Markov structure, regime persistence, or long-range behaviour.
+
+- **Privacy-preserving simulation:** produce synthetic categorical sequences with
+  realistic burstiness without copying a sensitive corpus.
+
+These applications require the abililty to generate 
+
++ very long sequences (million or billions of tokens seems a reasonable starting point); with
+
++ control over short-term behaviour (marginals) as well as enforcing long-memory. 
+ 
 ---
 
 ## Background
@@ -145,33 +176,7 @@ julia --project=. validation/lrd_method_diagnostics.jl
 These studies test controllability of simulated data; LRD-parameter estimation is
 intended for a future separate estimator package.
 
----
 
-## Motivations
-
-S5.jl is useful beyond basic generator benchmarking:
-
-- **Estimator testing:** generate labelled NN-LRD sequences where alphabet, marginal
-  distribution, local structure, and nominal LRD mechanism are known.
-- **Information-theoretic experiments:** create controlled cases for ideas such as
-  excess entropy rate, entropy-rate convergence, and the gap between local and
-  long-range predictability in LRD processes.
-- **Non-language sequence modelling:** train or stress-test LLM-style neural sequence
-  models on symbolic data that is not text, such as event logs, vulnerability classes,
-  genomic symbols, workflow traces, or synthetic protocol states.
-- **Context-length diagnostics:** test whether models exploit genuinely long context
-  rather than only short-range bigram/trigram cues.
-- **Anomaly and change-detection studies:** create controlled shifts in marginal,
-  local Markov structure, regime persistence, or long-range behaviour.
-- **Privacy-preserving simulation:** produce synthetic categorical sequences with
-  realistic burstiness without copying a sensitive corpus.
-
----
-
-## Implementation Status
-
-Implemented methods: `SpectralFGN`, `LGCM`, `WaveletMarkov`, `LAMP`,
-`OnOffMarkov`, and `FSS`.
 
 ---
 

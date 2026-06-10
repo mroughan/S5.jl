@@ -16,7 +16,7 @@ makedocs(
     warnonly  = false,
 )
 
-# Uncomment and configure to deploy to GitHub Pages:
-# deploydocs(
-#     repo = "github.com/mroughan/S5.jl.git",
-# )
+deploydocs(
+    repo = "github.com/mroughan/S5.jl.git",
+    devbranch = "main",
+)

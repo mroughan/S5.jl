@@ -1,0 +1,25 @@
+@testset "CI configuration" begin
+    root = normpath(joinpath(@__DIR__, ".."))
+    workflows = joinpath(root, ".github", "workflows")
+
+    expected = ("ci.yml", "aqua.yml", "jet.yml", "codecov.yml",
+                "documentation.yml")
+    @test all(isfile(joinpath(workflows, file)) for file in expected)
+
+    for file in ("aqua.yml", "jet.yml")
+        workflow = read(joinpath(workflows, file), String)
+        @test contains(workflow, "version: '1'")
+        @test !contains(workflow, "matrix:")
+    end
+
+    coverage = read(joinpath(workflows, "codecov.yml"), String)
+    @test contains(coverage, "julia-processcoverage@v1")
+    @test contains(coverage, "codecov/codecov-action@v7")
+
+    documentation = read(joinpath(workflows, "documentation.yml"), String)
+    @test contains(documentation, "docs/make.jl")
+
+    makefile = read(joinpath(root, "docs", "make.jl"), String)
+    @test contains(makefile, "deploydocs(")
+    @test contains(makefile, "devbranch = \"main\"")
+end
