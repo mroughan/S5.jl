@@ -1,5 +1,11 @@
 # S5.jl
 
+[![Package tests](https://github.com/mroughan/S5.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/mroughan/S5.jl/actions/workflows/ci.yml)
+[![Aqua](https://github.com/mroughan/S5.jl/actions/workflows/aqua.yml/badge.svg)](https://github.com/mroughan/S5.jl/actions/workflows/aqua.yml)
+[![JET](https://github.com/mroughan/S5.jl/actions/workflows/jet.yml/badge.svg)](https://github.com/mroughan/S5.jl/actions/workflows/jet.yml)
+[![Codecov](https://codecov.io/gh/mroughan/S5.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/mroughan/S5.jl)
+[![Documenter](https://github.com/mroughan/S5.jl/actions/workflows/documentation.yml/badge.svg)](https://github.com/mroughan/S5.jl/actions/workflows/documentation.yml)
+
 **Self-Similar Symbols Sequence Synthesis**
 
 Long-memory is a feature of many natural sequences, closely relate to statistical self-similarity. In the past, numerical sequences starting with the size of Nile river floods have been the main topic of study. But there are many domains where there are (hypothesised) long-memory sequences that are non-numerical, symbolic sequences. For instance: human writing, DNA, and so forth.

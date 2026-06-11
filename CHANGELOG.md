@@ -23,6 +23,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   strength-aware generator control contracts.
 - A reproducible local-structure validation study and focused tests for
   per-regime Markov specifications and aggregate bigram control.
+- README status badges for package tests, Aqua, JET, Codecov, and Documenter.
 
 ### Changed
 - Added explicit compatibility bounds for standard-library dependencies so Aqua

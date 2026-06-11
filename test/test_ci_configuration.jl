@@ -22,4 +22,13 @@
     makefile = read(joinpath(root, "docs", "make.jl"), String)
     @test contains(makefile, "deploydocs(")
     @test contains(makefile, "devbranch = \"main\"")
+
+    readme = read(joinpath(root, "README.md"), String)
+    for badge in ("actions/workflows/ci.yml/badge.svg",
+                  "actions/workflows/aqua.yml/badge.svg",
+                  "actions/workflows/jet.yml/badge.svg",
+                  "codecov.io/gh/mroughan/S5.jl/branch/main/graph/badge.svg",
+                  "actions/workflows/documentation.yml/badge.svg")
+        @test contains(readme, badge)
+    end
 end

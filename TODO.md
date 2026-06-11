@@ -253,7 +253,7 @@ Implemented as `LGCM`.
 ## Release Hygiene
 
 - [ ] Keep CHANGELOG.md updated as new controls, tests, and methods are added.
-- [ ] Ensure CI runs fast unit tests.
+- [x] Ensure CI runs fast unit tests.
 - [ ] Decide whether longer simulation studies run manually, nightly, or behind an
       environment variable.
 - [ ] Revisit version number after the TODO and docs match the implemented package.
