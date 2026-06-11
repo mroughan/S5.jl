@@ -45,6 +45,7 @@ function _cases(k::Int)
     P_persistent = _persistent_matrix(k)
     switch = [0.2 0.8; 0.8 0.2]
     lamp_d = min(1_000, max(100, 10 * k))
+    dyadic_d = 100_000
 
     return (
         "PB1_SpectralFGN_fft=n" => SpectralFGN(0.8, alphabet, p),
@@ -52,6 +53,8 @@ function _cases(k::Int)
         "PB3_WaveletMarkov_regimes=2" =>
             WaveletMarkov(0.8, alphabet, [P_iid, P_persistent]),
         "MB1_LAMP_d=$lamp_d" => LAMP(0.5, alphabet, p; d = lamp_d, epsilon = 0.02),
+        "MB1b_DyadicLAMP_d=$dyadic_d" =>
+            DyadicLAMP(0.5, alphabet, p; d = dyadic_d, epsilon = 0.02),
         "MB2_OnOffMarkov_regimes=2_Lmin=10" =>
             OnOffMarkov(1.5, alphabet, [P_iid, P_persistent], switch; L_min = 10.0),
         "MB3_FSS_streams=$k" => FSS(1.5, alphabet; rates = p),

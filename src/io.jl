@@ -123,6 +123,8 @@ function _build_metadata(gen::LAMP, n::Int, created::String)
     k   = length(gen.alphabet)
     alp = join(string.(gen.alphabet), ",")
     mar = join(string.(round.(gen.marginal; digits = 8)), ",")
+    P = join((join(string.(round.(gen.transition_matrix[i, :]; digits = 8)), ",")
+              for i in axes(gen.transition_matrix, 1)), ";")
     Dict(
         "title"     => "S5.jl synthetic LRD symbol sequence",
         "package"   => "S5",
@@ -130,13 +132,44 @@ function _build_metadata(gen::LAMP, n::Int, created::String)
         "created"   => created,
         "n"         => n,
         "generator" => "LAMP",
-        "method"    => "MB1",
+        "method"    => "MB1a",
         "generator_params" => Dict(
             "beta"          => string(gen.beta),
             "d"             => gen.d,
             "alphabet_size" => k,
             "alphabet"      => alp,
             "marginal"      => mar,
+            "transition_matrix" => P,
+        ),
+        "columns" => Dict(
+            "index"  => "time index (1-based)",
+            "symbol" => "generated symbol from the alphabet",
+        ),
+    )
+end
+
+function _build_metadata(gen::DyadicLAMP, n::Int, created::String)
+    k   = length(gen.alphabet)
+    alp = join(string.(gen.alphabet), ",")
+    mar = join(string.(round.(gen.marginal; digits = 8)), ",")
+    P = join((join(string.(round.(gen.transition_matrix[i, :]; digits = 8)), ",")
+              for i in axes(gen.transition_matrix, 1)), ";")
+    Dict(
+        "title"     => "S5.jl synthetic LRD symbol sequence",
+        "package"   => "S5",
+        "version"   => string(pkgversion(@__MODULE__)),
+        "created"   => created,
+        "n"         => n,
+        "generator" => "DyadicLAMP",
+        "method"    => "MB1b",
+        "generator_params" => Dict(
+            "beta"          => string(gen.beta),
+            "d"             => gen.d,
+            "alphabet_size" => k,
+            "alphabet"      => alp,
+            "marginal"      => mar,
+            "transition_matrix" => P,
+            "history_representation" => "dyadic buckets",
         ),
         "columns" => Dict(
             "index"  => "time index (1-based)",

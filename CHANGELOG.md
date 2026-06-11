@@ -36,12 +36,28 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - A `validation/longmemory_comparison.jl` script comparing S5's formalized
   diagnostic helpers with LongMemory.jl's `autocovariance`, `autocorrelation`,
   and `periodogram` functions.
+- Dashed interpretation-limit markers on LRD validation SVG plots, including the
+  finite-sample `n / 10` lag scale and explicit generator memory limits where
+  available.
+- `lamp_repeat_transition` and transition-matrix support for `LAMP`, allowing
+  repeat-biased identity/dyad transition patterns over history symbols.
+- `DyadicLAMP` as MB1b, a scalable dyadic-bucket approximation to LAMP for large
+  effective history depths.
 
 ### Changed
 - Added explicit compatibility bounds for standard-library dependencies so Aqua
   can enforce complete dependency compatibility metadata.
 - Fixed fresh-checkout Documenter CI setup by developing the unregistered S5 and
   IncCSV packages together before instantiating the documentation environment.
+- Removed obsolete proposal-specific references from package documentation and
+  docstrings.
+- Documented that MB1/LAMP remains a finite-history approximation and that PB3's
+  current Haar-style driver needs further validation or replacement.
+- Changed `LAMP` generation so `d > n` uses observed history only and assigns
+  missing pre-history weight to the target marginal instead of sampling an
+  artificial random pre-history.
+- Reclassified exact `LAMP` provenance as MB1a and `DyadicLAMP` provenance as
+  MB1b.
 
 ## [0.1.0] — 2026-06-04
 

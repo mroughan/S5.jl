@@ -9,8 +9,8 @@ streams in event-time order — the symbol with the earliest pending event is
 emitted at each step.
 
 LRD arises through heavy-tailed inter-arrival times. For tail index `α ∈ (1, 2)`,
-the return-time variance is infinite (Definition 4 of the grant proposal), giving
-Hurst parameter `H = (3−α)/2`.
+the return-time variance is infinite, giving nominal Hurst parameter
+`H = (3−α)/2`.
 
 # Arguments
 - `alpha::Real`: Pareto tail index, `α ∈ (1, 2)`.

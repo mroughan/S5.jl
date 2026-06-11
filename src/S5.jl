@@ -13,7 +13,8 @@ symbols for use as ground-truth test data in LRD estimation studies.
 | PB1 | `SpectralFGN` | Spectral fGn synthesis + quantization  |
 | PB2 | `LGCM`        | Latent Gaussian categorical model      |
 | PB3 | `WaveletMarkov` | Multiscale driver + Markov regimes    |
-| MB1 | `LAMP`        | Linear-Additive Markov Process         |
+| MB1a | `LAMP`       | Linear-Additive Markov Process         |
+| MB1b | `DyadicLAMP` | Dyadic-bucket LAMP approximation       |
 | MB2 | `OnOffMarkov` | Heavy-tailed regime-switching Markov   |
 | MB3 | `FSS`         | Fractal Symbol Sequence via FRP/FSNP   |
 
@@ -22,17 +23,13 @@ symbols for use as ground-truth test data in LRD estimation studies.
     generate(g, n; rng = Random.default_rng()) -> Vector
     save_sequence(filepath, seq, g; created)   -> filepath
 
-# References
-
-Roughan, M. & Willinger, W. (2023). Analysis and Synthesis of Long-Range Structure
-in Non-Numerical Time Series. ARC Discovery Grant proposal.
 """
 module S5
 
 using FFTW: ifft
 using Dates: today
 using Distributions: Pareto
-using LinearAlgebra: mul!, norm
+using LinearAlgebra: I, mul!, norm
 using Random
 using Statistics: mean, std
 import IncCSV
@@ -40,7 +37,8 @@ import IncCSV
 export LRDGenerator, generate, save_sequence
 export LocalStructureSpec, MarkovSpec, local_structure_order
 export ControlCapabilities, control_capabilities
-export SpectralFGN, LGCM, WaveletMarkov, LAMP, OnOffMarkov, FSS
+export SpectralFGN, LGCM, WaveletMarkov, LAMP, DyadicLAMP, OnOffMarkov, FSS
+export lamp_repeat_transition
 export target_marginal, empirical_marginal, empirical_bigram, empirical_trigram
 export bin_counts, total_variation, rowwise_total_variation
 export validate_transition_matrix, stationary_distribution

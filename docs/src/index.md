@@ -7,10 +7,6 @@ S5.jl generates Long-Range Dependent (LRD) sequences of categorical
 estimator tests, information-theoretic experiments, and LLM-style neural
 sequence models trained on challenging non-language symbolic streams.
 
-This package implements Task 1 of the ARC Discovery Grant project *"Analysis
-and Synthesis of Long-Range Structure in Non-Numerical Time Series"*
-(Roughan & Willinger, 2023).
-
 ## Quick start
 
 ```julia
@@ -36,6 +32,10 @@ seq3 = generate(g3, 10_000; rng)
 g4 = LAMP(0.5, [:a, :b, :c], [0.2, 0.3, 0.5]; d = 500, epsilon = 0.02)
 seq4 = generate(g4, 10_000; rng)
 
+# Model-based: scalable dyadic-bucket LAMP approximation
+g4b = DyadicLAMP(0.5, [:a, :b, :c], [0.2, 0.3, 0.5]; d = 100_000)
+seq4b = generate(g4b, 10_000; rng)
+
 # Model-based: heavy-tailed regime-switching Markov chain
 Q = [0.2 0.8; 0.8 0.2]
 g5 = OnOffMarkov(1.5, [:a, :b], [P1, P2], Q)
@@ -58,7 +58,8 @@ save_sequence("seq_pb1.inc", seq1, g1)
 | PB1 | `SpectralFGN` | Spectral $1/f^\alpha$ shaping          | Poor (set by quantization) | $O(n \log n)$  |
 | PB2 | `LGCM`        | Latent fGn streams + argmax            | Offset-calibrated marginals | $O(n \cdot k \cdot I)$ |
 | PB3 | `WaveletMarkov` | Multiscale driver + Markov regimes   | Per-regime Markov matrices | $O(n \log n + n \cdot k)$ |
-| MB1 | `LAMP`        | Power-law history weights              | Weight tensor              | $O(n \cdot d)$ |
+| MB1a | `LAMP`       | Exact power-law history weights        | History-weighted transition matrix | $O(n \cdot \min(d,n))$ |
+| MB1b | `DyadicLAMP` | Dyadic approximation to power-law history | History-weighted transition matrix | $O(n k \log n \log \min(d,n))$ |
 | MB2 | `OnOffMarkov` | Heavy-tailed regime sojourns           | Per-regime Markov matrices | $O(n \cdot k)$ |
 | MB3 | `FSS`         | Pareto renewal process per symbol      | Poor (independent streams) | $O(n \cdot k)$ |
 
@@ -73,6 +74,7 @@ tail/decay parameter with a nominal relationship to $H$:
 | `LGCM`        | `H`              | direct                 |
 | `WaveletMarkov` | `H`            | latent-driver target   |
 | `LAMP`        | `beta` ($\beta$) | $H = (2 - \beta) / 2$ |
+| `DyadicLAMP`  | `beta` ($\beta$) | finite dyadic approximation to $H = (2 - \beta) / 2$ |
 | `OnOffMarkov` | `alpha` ($\alpha$) | nominal $H = (3 - \alpha) / 2$ |
 | `FSS`         | `alpha` ($\alpha$) | $H = (3 - \alpha) / 2$ |
 
@@ -90,7 +92,8 @@ implied, asymptotic, induced, latent, and nominal behavior.
 | `SpectralFGN` | direct `marginal`; rank binning gives integer counts as close as possible to target | none |
 | `LGCM` | direct `marginal`; calibrated latent offsets | none |
 | `WaveletMarkov` | aggregate stationary marginal implied by regimes | per-regime bigram matrices |
-| `LAMP` | direct `marginal` mixed through `epsilon`; larger `epsilon` improves marginal control | history-weighted dependence, not arbitrary bigrams |
+| `LAMP` | direct `marginal` mixed through `epsilon`; larger `epsilon` improves marginal control | exact history-weighted transition matrix |
+| `DyadicLAMP` | direct `marginal` mixed through `epsilon`; larger `epsilon` improves marginal control | dyadic-bucket approximation to history-weighted transition matrix |
 | `OnOffMarkov` | aggregate stationary marginal implied by regimes | per-regime bigram matrices |
 | `FSS` | asymptotic `rates / sum(rates)` | none |
 
@@ -138,6 +141,10 @@ one-hot indicator series before autocorrelation, autocovariance, or periodogram
 calculations. `validation/longmemory_comparison.jl` compares those helpers with
 LongMemory.jl's `autocovariance`, `autocorrelation`, and `periodogram`, including
 the documented lag-zero and angular-frequency adaptations.
+Autocorrelation SVG plots include dashed vertical interpretation limits: a
+finite-sample `n / 10` lag limit, and explicit generator limits where they exist,
+such as `LAMP.d`. Power-spectrum plots show the same scales as reciprocal
+frequencies.
 
 See `VALIDATION_POLICY.md` for the validation tiers. Fast tests run through the
 package test suite. Longer validation studies and larger benchmark runs are manual
@@ -223,7 +230,6 @@ finite, unordered alphabet.
 
 ## References
 
-- Roughan, M. & Willinger, W. (2023). ARC Discovery Grant proposal.
 - Paxson, V. (1997). Fast, approximate synthesis of fractional Gaussian noise. *CCR* 27.
 - Kumar, R., et al. (2017). Linear additive Markov processes. *WWW '17*.
 - Lowen, S. B. & Teich, M. C. (1995). Fractal stochastic point processes. *Fractals* 3(1).

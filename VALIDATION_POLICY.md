@@ -61,6 +61,12 @@ Any adaptation to an external package, such as dropping LongMemory.jl's lag-zero
 autocorrelation or converting angular frequency to cycles per observation, should
 live in a named helper and be documented beside the validation script.
 
+Visual diagnostics should mark interpretation limits. For autocorrelation plots,
+the default finite-sample limit is lag `n / 10`, because estimates at much larger
+lags rely on a shrinking number of overlapping pairs. Spectrum plots should mark
+the reciprocal scale. If a generator has an explicit internal cutoff, such as
+`LAMP.d`, the plot should mark that as a separate generator limit.
+
 ## Benchmarking
 
 Benchmarks are performance evidence, not correctness tests. They live under

@@ -1,9 +1,5 @@
 # S5.jl TODO
 
-This package is the synthesis side of the ARC Discovery Grant project
-"Analysis and Synthesis of Long-Range Structure in Non-Numerical Time Series"
-(Roughan & Willinger, 2023).
-
 Estimator development will live elsewhere. S5.jl should therefore focus on:
 
 - generating symbol sequences with explicit provenance;
@@ -21,7 +17,8 @@ Implemented:
 - [x] `SpectralFGN` (PB1): spectral fGn plus quantization.
 - [x] `LGCM` (PB2): latent Gaussian categorical model.
 - [x] `WaveletMarkov` (PB3): multiscale latent driver with Markov regimes.
-- [x] `LAMP` (MB1): Linear-Additive Markov Process.
+- [x] `LAMP` (MB1a): exact finite-history Linear-Additive Markov Process.
+- [x] `DyadicLAMP` (MB1b): scalable dyadic-bucket LAMP approximation.
 - [x] `OnOffMarkov` (MB2): heavy-tailed regime-switching Markov chain.
 - [x] `FSS` (MB3): Fractal Symbol Sequence via independent Pareto renewal streams.
 - [x] INC output with provenance metadata via `save_sequence`.
@@ -65,6 +62,7 @@ that collection with the same element type.
 - [x] `LGCM(H, alphabet, marginal = uniform)`.
 - [x] `WaveletMarkov(H, alphabet, transition_matrices; regime_weights = uniform)`.
 - [x] `LAMP(beta, alphabet, marginal = uniform; d = 1000)`.
+- [x] `DyadicLAMP(beta, alphabet, marginal = uniform; d = 1_000_000)`.
 - [x] `OnOffMarkov(alpha, alphabet, transition_matrices, switching_matrix; L_min = 1.0)`.
 - [x] `FSS(alpha, alphabet; rates = ones(k), x_min = 1.0)`.
 - [x] Add explicit tests for non-symbol alphabets:
@@ -86,9 +84,11 @@ Current behavior:
   to approximate the target marginal.
 - `WaveletMarkov`: aggregate marginal is implied by regime weights and per-regime
   stationary distributions.
-- `LAMP`: accepts `marginal` and mixes it into the history-based probabilities through
-  `epsilon`. Larger `epsilon` improves finite-sample marginal control but weakens
-  history dependence.
+- `LAMP`: accepts `marginal` and mixes it into exact history-based probabilities
+  through `epsilon`. Larger `epsilon` improves finite-sample marginal control but
+  weakens history dependence.
+- `DyadicLAMP`: accepts the same `marginal`, `epsilon`, and transition matrix
+  controls as `LAMP`, but approximates long histories with dyadic age buckets.
 - `OnOffMarkov`: aggregate marginal is implied by regime occupancy and per-regime
   stationary distributions.
 - `FSS`: accepts `rates`; target marginal is `rates / sum(rates)` asymptotically.
@@ -133,8 +133,10 @@ Current capability:
   fGn streams and argmax mapping.
 - `WaveletMarkov`: direct per-regime bigram control through Markov transition
   matrices driven by a multiscale latent regime process.
-- `LAMP`: controls dependence through history weights, but not arbitrary user-specified
-  bigram/trigram probabilities in the current implementation.
+- `LAMP`: controls dependence through exact history weights and a transition matrix,
+  but not arbitrary user-specified bigram/trigram probabilities.
+- `DyadicLAMP`: controls dependence through dyadic-bucket approximations to the
+  same history-weighted transition mechanism.
 - `OnOffMarkov`: direct per-regime bigram control through Markov transition matrices.
 - `FSS`: no direct bigram/trigram control because symbol streams are independent.
 
@@ -187,6 +189,9 @@ Keep these separate from fast unit tests if runtime becomes large.
 - [x] Move visual LRD diagnostic mechanics into reusable validation code, including
       centered one-hot transformations and LongMemory.jl-compatible autocovariance,
       autocorrelation, and periodogram conventions.
+- [x] Add dashed interpretation limits to LRD validation plots: finite-sample
+      `n / 10` autocorrelation support, reciprocal spectrum scale, and explicit
+      generator memory limits such as `LAMP.d`.
 - [ ] Write summary tables to `data/validation/results/` only if those outputs are
       intended to be tracked.
 
@@ -237,6 +242,32 @@ Implemented as `WaveletMarkov`.
 - [x] Map driver values to regimes.
 - [x] Emit via regime-specific transition matrices.
 - [x] Test controllability of bigrams conditional on regime and in aggregate.
+- [ ] Revisit the latent LRD driver. Current diagnostics suggest the pragmatic
+      Haar-style cascade does not reliably produce visible symbol-level LRD even
+      when regimes have distinct stationary marginals. A likely path is to
+      separate the regime-driver interface from the Markov emission layer, then
+      compare candidate drivers directly: spectral fGn rank-binning, a calibrated
+      wavelet synthesis, and the current Haar cascade.
+
+### MB1: Linear-Additive Markov Process
+
+Implemented as exact `LAMP` (MB1a) and approximate `DyadicLAMP` (MB1b).
+
+- [x] Reassess whether fixed-depth LAMP should be labeled only as a finite-history
+      approximation. With a hard history depth `d`, the generator cannot provide
+      true asymptotic LRD beyond its configured memory scale.
+- [x] Allow `d > n` in a finite-sequence honest way: only observed history
+      contributes, while missing pre-history weight is assigned to the target
+      marginal.
+- [x] Add a history-weighted transition matrix to LAMP, with
+      `lamp_repeat_transition` providing a simple identity/dyad mixture for
+      repeat-biased behavior.
+- [x] Prototype a scalable full-history or multiscale-history variant whose
+      effective memory grows with `n`, with explicit provenance for the finite
+      simulation cutoff. `DyadicLAMP` implements the dyadic-bucket path for
+      power-law history weights.
+- [ ] Validate MB1b against MB1a on small sequences and against LRD diagnostics on
+      larger sequences where exact MB1a is too expensive.
 
 ### PB2: Latent Gaussian Categorical Model
 

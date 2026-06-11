@@ -41,12 +41,33 @@ import IncCSV
             inc  = IncCSV.readinc(path)
             meta = IncCSV.metadata(inc)
             @test meta["generator"] == "LAMP"
-            @test meta["method"]    == "MB1"
+            @test meta["method"]    == "MB1a"
             @test meta["n"]         == 80
 
             gp = meta["generator_params"]
             @test gp["beta"] == "0.5"
             @test gp["d"]    == 50
+            @test gp["transition_matrix"] == "1.0,0.0;0.0,1.0"
+        end
+    end
+
+    @testset "DyadicLAMP round-trip" begin
+        mktempdir() do dir
+            g    = DyadicLAMP(0.5, [:x, :y]; d = 5_000)
+            seq  = generate(g, 80; rng = MersenneTwister(12))
+            path = joinpath(dir, "mb1b.inc")
+            save_sequence(path, seq, g)
+
+            inc  = IncCSV.readinc(path)
+            meta = IncCSV.metadata(inc)
+            @test meta["generator"] == "DyadicLAMP"
+            @test meta["method"]    == "MB1b"
+            @test meta["n"]         == 80
+
+            gp = meta["generator_params"]
+            @test gp["beta"] == "0.5"
+            @test gp["d"]    == 5000
+            @test gp["history_representation"] == "dyadic buckets"
         end
     end
 

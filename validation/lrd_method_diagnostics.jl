@@ -24,7 +24,9 @@ function generator_factories(alphabet)
         ("PB1_SpectralFGN", () -> SpectralFGN(0.8, alphabet, marginal)),
         ("PB2_LGCM", () -> LGCM(0.8, alphabet, marginal; calibration_iters = 8)),
         ("PB3_WaveletMarkov", () -> WaveletMarkov(0.8, alphabet, regime_matrices)),
-        ("MB1_LAMP", () -> LAMP(0.4, alphabet, marginal; d = 200, epsilon = 0.02)),
+        ("MB1a_LAMP", () -> LAMP(0.4, alphabet, marginal; d = 200, epsilon = 0.02)),
+        ("MB1b_DyadicLAMP", () -> DyadicLAMP(0.4, alphabet, marginal;
+                                             d = 100_000, epsilon = 0.02)),
         ("MB2_OnOffMarkov", () -> OnOffMarkov(1.4, alphabet, regime_matrices, Q; L_min = 50.0)),
         ("MB3_FSS", () -> FSS(1.4, alphabet; rates = ones(k))),
     ]
@@ -94,10 +96,55 @@ function svg_escape(s)
     replace(replace(replace(string(s), "&" => "&amp;"), "<" => "&lt;"), ">" => "&gt;")
 end
 
-function write_loglog_svg(path, title, xlabel, ylabel, x, y)
+function diagnostic_lag_limit(n::Int; overlap_fraction::Real = 0.9)
+    0 < overlap_fraction < 1 ||
+        throw(ArgumentError("overlap_fraction must be in (0, 1)"))
+    n ≥ 2 || throw(ArgumentError("n must be at least 2"))
+    return max(1, floor(Int, n * (1 - Float64(overlap_fraction))))
+end
+
+function intrinsic_lag_limit(g)
+    return nothing
+end
+
+intrinsic_lag_limit(g::LAMP) = g.d
+intrinsic_lag_limit(g::DyadicLAMP) = g.d
+
+function acf_limit_annotations(g, n::Int)
+    finite_limit = diagnostic_lag_limit(n)
+    annotations = [(;
+        x = finite_limit,
+        label = "finite-sample limit n/10",
+        color = "#d62728",
+    )]
+    intrinsic = intrinsic_lag_limit(g)
+    if intrinsic !== nothing && intrinsic > 0 && intrinsic != finite_limit
+        push!(annotations, (;
+            x = intrinsic,
+            label = "generator memory limit",
+            color = "#9467bd",
+        ))
+    end
+    return annotations
+end
+
+function spectrum_limit_annotations(g, n::Int)
+    annotations = NamedTuple[]
+    for ann in acf_limit_annotations(g, n)
+        push!(annotations, (;
+            x = 1 / ann.x,
+            label = ann.label,
+            color = ann.color,
+        ))
+    end
+    return annotations
+end
+
+function write_loglog_svg(path, title, xlabel, ylabel, x, y; vertical_lines = NamedTuple[])
     pts = [(Float64(xi), Float64(yi)) for (xi, yi) in zip(x, y)
            if xi > 0 && yi > 0 && isfinite(xi) && isfinite(yi)]
     sort!(pts; by = first)
+    isempty(pts) && throw(ArgumentError("cannot write log-log SVG with no positive points"))
     width, height = 900, 650
     ml, mr, mt, mb = 90, 30, 55, 80
     xmin, xmax = extrema(first.(pts))
@@ -135,6 +182,18 @@ function write_loglog_svg(path, title, xlabel, ylabel, x, y)
         end
 
         println(io, """<polyline fill="none" stroke="#1f77b4" stroke-width="2" points="$poly"/>""")
+        legend_y = mt + 18
+        for line in vertical_lines
+            xv = Float64(line.x)
+            xmin ≤ xv ≤ xmax || continue
+            xpix = round(sx(xv); digits = 2)
+            color = get(line, :color, "#d62728")
+            label = svg_escape(get(line, :label, "diagnostic limit"))
+            println(io, """<line x1="$xpix" y1="$mt" x2="$xpix" y2="$(height-mb)" stroke="$color" stroke-width="2" stroke-dasharray="7 5"/>""")
+            println(io, """<line x1="$(width-300)" y1="$legend_y" x2="$(width-260)" y2="$legend_y" stroke="$color" stroke-width="2" stroke-dasharray="7 5"/>""")
+            println(io, """<text x="$(width-252)" y="$(legend_y+4)" font-family="sans-serif" font-size="12">$(label)</text>""")
+            legend_y += 18
+        end
         println(io, """<text x="$(width/2)" y="$(height-25)" text-anchor="middle" font-family="sans-serif" font-size="16">$(svg_escape(xlabel))</text>""")
         println(io, """<text x="25" y="$(height/2)" transform="rotate(-90 25 $(height/2))" text-anchor="middle" font-family="sans-serif" font-size="16">$(svg_escape(ylabel))</text>""")
         println(io, """</svg>""")
@@ -175,10 +234,12 @@ function run_lrd_diagnostics(; n::Int = DEFAULT_N,
         avg_acf = zeros(Float64, maxlag)
         avg_power = zeros(Float64, n ÷ 2)
         freqs = nothing
+        diagnostic_gen = nothing
 
         for r in 1:replicates
             rng = StableRNG(seed + 10_000 * method_index + r)
             gen = factory()
+            r == 1 && (diagnostic_gen = gen)
             seq = generate(gen, n; rng)
             if save_sequences
                 seqpath = joinpath(seqdir, "$(method)_$(lpad(r, 2, '0')).inc")
@@ -205,11 +266,13 @@ function run_lrd_diagnostics(; n::Int = DEFAULT_N,
         write_loglog_svg(joinpath(plotdir, "$(method)_autocorrelation.svg"),
                          "$method average autocorrelation",
                          "lag", "positive average autocorrelation",
-                         b_lags, b_acf)
+                         b_lags, b_acf;
+                         vertical_lines = acf_limit_annotations(diagnostic_gen, n))
         write_loglog_svg(joinpath(plotdir, "$(method)_power_spectrum.svg"),
                          "$method average power spectrum",
                          "frequency", "average periodogram",
-                         b_freqs, b_power)
+                         b_freqs, b_power;
+                         vertical_lines = spectrum_limit_annotations(diagnostic_gen, n))
     end
 
     write_diagnostic_inc(

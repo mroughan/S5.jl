@@ -23,6 +23,7 @@
     @test contains(benchmark_script, "S5_BENCHMARK_LARGE")
     @test contains(benchmark_script, "PB1_SpectralFGN_fft=n")
     @test contains(benchmark_script, "MB1_LAMP_d=")
+    @test contains(benchmark_script, "MB1b_DyadicLAMP_d=")
     @test contains(benchmark_script, "MB3_FSS_streams=")
 
     validation_project = read(joinpath(root, "validation", "Project.toml"), String)
@@ -32,4 +33,9 @@
     @test contains(comparison_script, "LongMemory.autocovariance")
     @test contains(comparison_script, "LongMemory.autocorrelation")
     @test contains(comparison_script, "LongMemory.periodogram")
+
+    diagnostic_script = read(joinpath(root, "validation", "lrd_method_diagnostics.jl"), String)
+    @test contains(diagnostic_script, "diagnostic_lag_limit")
+    @test contains(diagnostic_script, "stroke-dasharray")
+    @test contains(diagnostic_script, "intrinsic_lag_limit(g::LAMP)")
 end

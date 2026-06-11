@@ -31,6 +31,7 @@ WaveletMarkov
 
 ```@docs
 LAMP
+DyadicLAMP
 OnOffMarkov
 FSS
 ```
@@ -47,6 +48,7 @@ total_variation
 rowwise_total_variation
 validate_transition_matrix
 stationary_distribution
+lamp_repeat_transition
 S5.quantize_to_symbols
 S5._fgn_spectral
 S5._pareto_sample

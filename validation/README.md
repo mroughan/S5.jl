@@ -20,8 +20,9 @@ julia --project=. validation/marginal_control.jl
 ```
 
 The script prints aggregate total-variation and maximum absolute marginal errors for
-`SpectralFGN`, `LGCM`, `WaveletMarkov`, `LAMP`, `OnOffMarkov`, and `FSS` across
-a small grid of sequence lengths, alphabet sizes, and marginal distributions.
+`SpectralFGN`, `LGCM`, `WaveletMarkov`, `LAMP`, `DyadicLAMP`, `OnOffMarkov`, and
+`FSS` across a small grid of sequence lengths, alphabet sizes, and marginal
+distributions.
 
 `LGCM` is more expensive than the other methods because it calibrates latent
 offsets over an `n × k` matrix. Increase `replicates`, `ns`, or
@@ -98,6 +99,17 @@ The log-binning code keeps the final bin closed only at its upper edge and sorts
 the binned x-values before writing tables and SVG polylines, so plot x-values are
 strictly increasing within each method. Log-log SVG plots are written under
 `validation/results/lrd_diagnostics/plots/`.
+
+The SVG plots include vertical dashed interpretation limits. The red line marks
+the finite-sample lag limit `n / 10`, chosen so autocorrelation estimates are not
+interpreted deep into the range where too few overlapping pairs remain. On power
+spectrum plots this same scale is shown as frequency `10 / n`. Methods with an
+explicit internal memory limit may add a second dashed line; for example, `LAMP`
+and `DyadicLAMP` mark their configured history depth `d`.
+
+These limits are visual guidance only. They do not prove LRD behavior, and they
+make visible when poor diagnostics are caused by a generator's own truncation
+rather than by estimator plotting alone.
 
 ## LongMemory.jl Comparison
 

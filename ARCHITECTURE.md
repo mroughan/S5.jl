@@ -3,10 +3,9 @@
 ## Purpose
 
 S5.jl synthesizes long-range-dependent (LRD) sequences over finite, ordered
-alphabets. It is the synthesis component of the research program described in
-the project README and grant material. The package provides reproducible
-generators with explicit control contracts and provenance, rather than claiming
-that every generator controls every statistical property.
+alphabets. It provides reproducible generators with explicit control contracts
+and provenance, rather than claiming that every generator controls every
+statistical property.
 
 This document defines the stable development pathway for S5.jl. The current
 research backlog remains in `TODO.md`.
@@ -201,8 +200,8 @@ When goals conflict, use this order:
 
 ## References
 
-- Project scope and scientific context: `README.md`, `TODO.md`,
-  `paper/main.tex`, and `background/Discovery_Grant_application_in_2023__minus_Lewis_.pdf`.
+- Project scope and scientific context: `README.md`, `TODO.md`, and
+  `paper/main.tex`.
 - Julia contributors, [Style Guide](https://docs.julialang.org/en/v1/manual/style-guide/).
 - Julia contributors, [Performance Tips](https://docs.julialang.org/en/v1/manual/performance-tips/).
 - Semantic Versioning, [Semantic Versioning 2.0.0](https://semver.org/).
