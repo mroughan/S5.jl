@@ -28,12 +28,13 @@ jobs:
         run: |
           julia --project=docs -e '
             using Pkg
-            Pkg.add(url="https://github.com/mroughan/IncCSV.jl")
-            Pkg.develop(PackageSpec(path=pwd()))
+            Pkg.develop([
+              PackageSpec(path=pwd()),
+              PackageSpec(url="https://github.com/mroughan/IncCSV.jl"),
+            ])
             Pkg.instantiate()
           '
       - name: Build and deploy documentation
         run: julia --project=docs docs/make.jl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-

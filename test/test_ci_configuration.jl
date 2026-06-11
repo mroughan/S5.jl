@@ -18,6 +18,11 @@
 
     documentation = read(joinpath(workflows, "documentation.yml"), String)
     @test contains(documentation, "docs/make.jl")
+    @test contains(documentation, "Pkg.develop([")
+    @test contains(documentation, "PackageSpec(path=pwd())")
+    @test contains(documentation,
+                   "PackageSpec(url=\"https://github.com/mroughan/IncCSV.jl\")")
+    @test !contains(documentation, "Pkg.add(url=")
 
     makefile = read(joinpath(root, "docs", "make.jl"), String)
     @test contains(makefile, "deploydocs(")

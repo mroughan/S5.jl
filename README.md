@@ -3,8 +3,12 @@
 [![Package tests](https://github.com/mroughan/S5.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/mroughan/S5.jl/actions/workflows/ci.yml)
 [![Aqua](https://github.com/mroughan/S5.jl/actions/workflows/aqua.yml/badge.svg)](https://github.com/mroughan/S5.jl/actions/workflows/aqua.yml)
 [![JET](https://github.com/mroughan/S5.jl/actions/workflows/jet.yml/badge.svg)](https://github.com/mroughan/S5.jl/actions/workflows/jet.yml)
-[![Codecov](https://codecov.io/gh/mroughan/S5.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/mroughan/S5.jl)
+[![Docs](https://img.shields.io/badge/docs-dev-blue.svg)](https://mroughan.github.io/S5.jl/dev/)
+[![Codecov](https://codecov.io/gh/mroughan/S5.jl/branch/main/graph/badge.svg?token=WYXfD9ij0s)](https://codecov.io/gh/mroughan/S5.jl)
 [![Documenter](https://github.com/mroughan/S5.jl/actions/workflows/documentation.yml/badge.svg)](https://github.com/mroughan/S5.jl/actions/workflows/documentation.yml)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://mroughan.github.io/DiversityAndDissimilarity.jl/dev)
+[![Julia](https://img.shields.io/badge/julia-1.10%2B-blue.svg)](https://julialang.org/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 **Self-Similar Symbols Sequence Synthesis**
 

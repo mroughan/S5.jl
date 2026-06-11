@@ -254,6 +254,7 @@ Implemented as `LGCM`.
 
 - [ ] Keep CHANGELOG.md updated as new controls, tests, and methods are added.
 - [x] Ensure CI runs fast unit tests.
+- [x] Ensure Documenter CI resolves unregistered dependencies from a clean checkout.
 - [ ] Decide whether longer simulation studies run manually, nightly, or behind an
       environment variable.
 - [ ] Revisit version number after the TODO and docs match the implemented package.

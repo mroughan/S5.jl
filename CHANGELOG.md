@@ -28,6 +28,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 - Added explicit compatibility bounds for standard-library dependencies so Aqua
   can enforce complete dependency compatibility metadata.
+- Fixed fresh-checkout Documenter CI setup by developing the unregistered S5 and
+  IncCSV packages together before instantiating the documentation environment.
 
 ## [0.1.0] — 2026-06-04
 
