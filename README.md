@@ -89,11 +89,11 @@ Complexity notation used below:
 These generate an underlying numerical LRD process and then map it to symbols.
 The LRD property is inherited from the numerical layer.
 
-| ID | Name | Status | LRD mechanism | Short-range control | Complexity | Novel? |
-|----|------|--------|---------------|---------------------|------------|--------|
-| PB1 | Spectral fGn + quantization | Implemented | Spectral $1/f^\alpha$ shaping | Poor (set by quantization) | $O(n \log n)$ | No |
-| PB2 | Latent Gaussian categorical (LGCM) | Implemented | fGn streams + argmax | Via calibrated offsets | $O(n k I)$ | No |
-| PB3 | Spectral/wavelet driver + Markov state machine | Implemented | Latent LRD driver rank-binned into regimes | Markov transition matrices | $O(n \log n + n k)$ | Partial |
+| ID | Name | LRD mechanism | Short-range control | Complexity | Novel? |
+|----|------|---------------|---------------------|------------|--------|
+| PB1 | Spectral fGn + quantization | Spectral $1/f^\alpha$ shaping | Poor (set by quantization) | $O(n \log n)$ | No |
+| PB2 | Latent Gaussian categorical (LGCM) | fGn streams + argmax | Via calibrated offsets | $O(n k I)$ | No |
+| PB3 | Spectral/wavelet driver + Markov state machine | Latent LRD driver rank-binned into regimes | Markov transition matrices | $O(n \log n + n k)$ | Partial |
 
 **PB1 — Spectral fGn + quantization.**
 Fractional Gaussian noise with Hurst parameter $H$ is synthesised using the fast,
@@ -125,12 +125,12 @@ as a research extension.
 
 These produce LRD through the stochastic model itself rather than via mapping.
 
-| ID | Name | Status | LRD mechanism | Short-range control | Complexity | Novel? |
-|----|------|--------|---------------|---------------------|------------|--------|
-| MB1a | Linear-Additive Markov Process (LAMP) | Implemented | Exact power-law history weights | History-weighted transition matrix | $O(n \cdot \min(d,n))$ | No |
-| MB1b | Dyadic-bucket LAMP | Implemented | Dyadic approximation to power-law history | History-weighted transition matrix | $O(n k \log n \log \min(d,n))$ | Partial |
-| MB2 | Heavy-tailed On/Off doubly-stochastic Markov chain | Implemented | Pareto regime sojourn times | Per-regime Markov chains | $O(n \cdot k)$ | No |
-| MB3 | Fractal Symbol Sequence (FSS) via FRP/FSNP | Implemented | Fractal point process inter-arrivals | Poor (independent streams) | $O(n \cdot k)$ | **Yes** |
+| ID | Name | LRD mechanism | Short-range control | Complexity | Novel? |
+|----|------|---------------|---------------------|------------|--------|
+| MB1a | Linear-Additive Markov Process (LAMP) | Exact power-law history weights | History-weighted transition matrix | $O(n \cdot \min(d,n))$ | No |
+| MB1b | Dyadic-bucket LAMP | Dyadic approximation to power-law history | History-weighted transition matrix | $O(n k \log n \log \min(d,n))$ | Partial |
+| MB2 | Heavy-tailed On/Off doubly-stochastic Markov chain | Pareto regime sojourn times | Per-regime Markov chains | $O(n \cdot k)$ | No |
+| MB3 | Fractal Symbol Sequence (FSS) via FRP/FSNP | Fractal point process inter-arrivals | Poor (independent streams) | $O(n \cdot k)$ | **Yes** |
 
 **MB1a/MB1b — Linear-Additive Markov Process (LAMP).**
 Transition probabilities are a weighted sum over transition-matrix rows selected by
@@ -221,7 +221,9 @@ adaptations to LongMemory.jl's lag and frequency conventions.
 Autocorrelation validation plots include dashed vertical interpretation limits:
 a finite-sample `n / 10` lag limit, and explicit generator limits where they
 exist, such as `LAMP.d`. Spectrum plots show the same scales as reciprocal
-frequencies.
+frequencies. Autocorrelation plots also include a gray dashed nominal
+power-law reference line with slope `lag^(-beta)`, anchored to the first positive
+plotted autocorrelation value.
 
 Validation policy is documented in `VALIDATION_POLICY.md`. The fast package test
 suite remains the main development pathway, while larger empirical studies are run

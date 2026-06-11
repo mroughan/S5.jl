@@ -143,15 +143,44 @@ function spectrum_limit_annotations(g, n::Int)
     return annotations
 end
 
-function write_loglog_svg(path, title, xlabel, ylabel, x, y; vertical_lines = NamedTuple[])
+nominal_acf_decay_exponent(g::Union{SpectralFGN,LGCM,WaveletMarkov}) = 2 - 2g.H
+nominal_acf_decay_exponent(g::Union{LAMP,DyadicLAMP}) = g.beta
+nominal_acf_decay_exponent(g::Union{OnOffMarkov,FSS}) = g.alpha - 1
+
+function power_law_reference(x::AbstractVector{<:Real}, y::AbstractVector{<:Real}, g)
+    beta = nominal_acf_decay_exponent(g)
+    pts = [(Float64(xi), Float64(yi)) for (xi, yi) in zip(x, y)
+           if xi > 0 && yi > 0 && isfinite(xi) && isfinite(yi)]
+    isempty(pts) && return NamedTuple[]
+    sort!(pts; by = first)
+    x0, y0 = first(pts)
+    ref = [(xi, y0 * (xi / x0)^(-beta)) for (xi, _) in pts]
+    return [(;
+        x = first.(ref),
+        y = last.(ref),
+        label = "nominal power-law beta=$(round(beta; digits = 3))",
+        color = "#555555",
+        dash = "4 4",
+    )]
+end
+
+function write_loglog_svg(path, title, xlabel, ylabel, x, y;
+                          vertical_lines = NamedTuple[],
+                          reference_lines = NamedTuple[])
     pts = [(Float64(xi), Float64(yi)) for (xi, yi) in zip(x, y)
            if xi > 0 && yi > 0 && isfinite(xi) && isfinite(yi)]
     sort!(pts; by = first)
     isempty(pts) && throw(ArgumentError("cannot write log-log SVG with no positive points"))
+    ref_pts = Tuple{Float64, Float64}[]
+    for ref in reference_lines
+        append!(ref_pts, [(Float64(xi), Float64(yi)) for (xi, yi) in zip(ref.x, ref.y)
+                          if xi > 0 && yi > 0 && isfinite(xi) && isfinite(yi)])
+    end
     width, height = 900, 650
     ml, mr, mt, mb = 90, 30, 55, 80
-    xmin, xmax = extrema(first.(pts))
-    ymin, ymax = extrema(last.(pts))
+    all_pts = isempty(ref_pts) ? pts : vcat(pts, ref_pts)
+    xmin, xmax = extrema(first.(all_pts))
+    ymin, ymax = extrema(last.(all_pts))
     lxmin, lxmax = log10(xmin), log10(xmax)
     lymin, lymax = log10(ymin), log10(ymax)
     lymin == lymax && (lymax += 1)
@@ -184,8 +213,24 @@ function write_loglog_svg(path, title, xlabel, ylabel, x, y; vertical_lines = Na
             println(io, """<text x="$(ml-10)" y="$(ypix+4)" text-anchor="end" font-family="sans-serif" font-size="12">10^$e</text>""")
         end
 
-        println(io, """<polyline fill="none" stroke="#1f77b4" stroke-width="2" points="$poly"/>""")
         legend_y = mt + 18
+        for ref in reference_lines
+            rpts = [(Float64(xi), Float64(yi)) for (xi, yi) in zip(ref.x, ref.y)
+                    if xi > 0 && yi > 0 && isfinite(xi) && isfinite(yi)]
+            isempty(rpts) && continue
+            sort!(rpts; by = first)
+            rpoly = join(["$(round(sx(xi); digits=2)),$(round(sy(yi); digits=2))"
+                          for (xi, yi) in rpts], " ")
+            color = get(ref, :color, "#555555")
+            dash = get(ref, :dash, "4 4")
+            label = svg_escape(get(ref, :label, "power-law reference"))
+            println(io, """<polyline fill="none" stroke="$color" stroke-width="2" stroke-dasharray="$dash" points="$rpoly"/>""")
+            println(io, """<line x1="$(width-300)" y1="$legend_y" x2="$(width-260)" y2="$legend_y" stroke="$color" stroke-width="2" stroke-dasharray="$dash"/>""")
+            println(io, """<text x="$(width-252)" y="$(legend_y+4)" font-family="sans-serif" font-size="12">$(label)</text>""")
+            legend_y += 18
+        end
+
+        println(io, """<polyline fill="none" stroke="#1f77b4" stroke-width="2" points="$poly"/>""")
         for line in vertical_lines
             xv = Float64(line.x)
             xmin ≤ xv ≤ xmax || continue
@@ -270,7 +315,9 @@ function run_lrd_diagnostics(; n::Int = DEFAULT_N,
                          "$method average autocorrelation",
                          "lag", "positive average autocorrelation",
                          b_lags, b_acf;
-                         vertical_lines = acf_limit_annotations(diagnostic_gen, n))
+                         vertical_lines = acf_limit_annotations(diagnostic_gen, n),
+                         reference_lines = power_law_reference(b_lags, b_acf,
+                                                               diagnostic_gen))
         write_loglog_svg(joinpath(plotdir, "$(method)_power_spectrum.svg"),
                          "$method average power spectrum",
                          "frequency", "average periodogram",

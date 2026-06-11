@@ -15,6 +15,7 @@
     @test contains(readme, "`d`: configured history depth")
     @test contains(readme, "`k`: alphabet size")
     @test contains(readme, "`I`: number of calibration iterations")
+    @test !contains(readme, "| ID | Name | Status |")
 
     benchmark_project = read(joinpath(root, "benchmark", "Project.toml"), String)
     @test contains(benchmark_project, "BenchmarkTools")
@@ -46,4 +47,6 @@
     @test contains(diagnostic_script, "diagnostic_lag_limit")
     @test contains(diagnostic_script, "stroke-dasharray")
     @test contains(diagnostic_script, "intrinsic_lag_limit(g::LAMP)")
+    @test contains(diagnostic_script, "power_law_reference")
+    @test contains(diagnostic_script, "nominal power-law beta=")
 end

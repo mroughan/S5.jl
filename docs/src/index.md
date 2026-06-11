@@ -147,7 +147,9 @@ the documented lag-zero and angular-frequency adaptations.
 Autocorrelation SVG plots include dashed vertical interpretation limits: a
 finite-sample `n / 10` lag limit, and explicit generator limits where they exist,
 such as `LAMP.d`. Power-spectrum plots show the same scales as reciprocal
-frequencies.
+frequencies. Autocorrelation plots also include a gray dashed nominal
+power-law reference line with slope `lag^(-beta)`, anchored to the first positive
+plotted autocorrelation value.
 
 See `VALIDATION_POLICY.md` for the validation tiers. Fast tests run through the
 package test suite. Longer validation studies and larger benchmark runs are manual
