@@ -254,6 +254,14 @@ function validate_transition_matrix(P::AbstractMatrix{<:Real},
     return Q
 end
 
+function unpack_markov_specs(specs::AbstractVector{<:MarkovSpec})
+    isempty(specs) && throw(ArgumentError("Markov specifications must be non-empty"))
+    alphabet = first(specs).alphabet
+    all(isequal(spec.alphabet, alphabet) for spec in specs) ||
+        throw(ArgumentError("all Markov specifications must use the same alphabet"))
+    return alphabet, [copy(spec.transition_matrix) for spec in specs]
+end
+
 """
     stationary_distribution(P; maxiter = 10_000, tol = 1e-12) -> Vector{Float64}
 

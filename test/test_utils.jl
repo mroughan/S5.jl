@@ -85,6 +85,40 @@ end
         @test isapprox(cnt / 1_000, 2.0; atol = 0.01)
     end
 
+    @testset "MarkovSpec" begin
+        P = [0.9 0.1; 0.2 0.8]
+        spec = MarkovSpec([:a, :b], P)
+        @test spec.alphabet == [:a, :b]
+        @test spec.transition_matrix == P
+        @test spec.transition_matrix !== P
+        @test sprint(show, spec) == "MarkovSpec{Vector{Symbol}}(k=2)"
+
+        @test_throws ArgumentError MarkovSpec([:a, :a], P)
+        @test_throws ArgumentError MarkovSpec([:a, :b, :c], P)
+        @test_throws ArgumentError MarkovSpec([:a, :b], [0.9 0.2; 0.2 0.8])
+    end
+
+    @testset "control capabilities" begin
+        P = [0.9 0.1; 0.2 0.8]
+        Q = [0.1 0.9; 0.8 0.2]
+        generators = (
+            SpectralFGN(0.8, [:a, :b]),
+            LGCM(0.8, [:a, :b]),
+            WaveletMarkov(0.8, [:a, :b], [P]),
+            LAMP(0.5, [:a, :b]),
+            OnOffMarkov(1.5, [:a, :b], [P, P], Q),
+            FSS(1.5, [:a, :b]),
+        )
+
+        capabilities = control_capabilities.(generators)
+        @test all(c.alphabet == :exact for c in capabilities)
+        @test capabilities[1].marginal == :finite_sample
+        @test capabilities[3].bigram == :per_regime
+        @test capabilities[5].bigram == :per_regime
+        @test capabilities[6].marginal == :asymptotic
+        @test all(c.trigram == :induced for c in capabilities)
+    end
+
     @testset "empirical marginal, bigram, and trigram" begin
         seq = [:a, :b, :a, :a, :b]
         @test empirical_marginal(seq, [:a, :b]) == [0.6, 0.4]

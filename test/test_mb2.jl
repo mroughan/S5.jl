@@ -13,6 +13,11 @@
         @test g.L_min == 2.0
         @test length(g.transition_matrices) == 2
         @test g.switching_matrix == Q
+
+        specs = [MarkovSpec([:a, :b], P1), MarkovSpec([:a, :b], P2)]
+        g2 = OnOffMarkov(1.5, specs, Q; L_min = 2.0)
+        @test g2.alphabet == [:a, :b]
+        @test g2.transition_matrices == [P1, P2]
     end
 
     @testset "Constructor — argument errors" begin
@@ -24,6 +29,9 @@
         @test_throws ArgumentError OnOffMarkov(1.5, [:a, :b], [P1, [1.0 0.2; 0.0 0.8]], Q)
         @test_throws ArgumentError OnOffMarkov(1.5, [:a, :b], [P1, P2], [1.0 0.0])
         @test_throws ArgumentError OnOffMarkov(1.5, [:a, :b], [P1, P2], Q; L_min = 0.0)
+        @test_throws ArgumentError OnOffMarkov(1.5, MarkovSpec[], Q)
+        @test_throws ArgumentError OnOffMarkov(
+            1.5, [MarkovSpec([:a, :b], P1), MarkovSpec(["a", "b"], P2)], Q)
     end
 
     @testset "generate — output type and length" begin

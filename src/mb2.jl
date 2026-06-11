@@ -73,6 +73,19 @@ function OnOffMarkov(alpha::Real, alphabet,
     OnOffMarkov{typeof(alphabet)}(Float64(alpha), alphabet, Ps, Q, Float64(L_min))
 end
 
+"""
+    OnOffMarkov(alpha, specs, switching_matrix; L_min = 1.0)
+
+Construct an [`OnOffMarkov`](@ref) generator from one [`MarkovSpec`](@ref) per
+regime. All specifications must use the same ordered alphabet.
+"""
+function OnOffMarkov(alpha::Real, specs::AbstractVector{<:MarkovSpec},
+                     switching_matrix::AbstractMatrix{<:Real};
+                     L_min::Real = 1.0)
+    alphabet, Ps = unpack_markov_specs(specs)
+    return OnOffMarkov(alpha, alphabet, Ps, switching_matrix; L_min)
+end
+
 function Base.show(io::IO, g::OnOffMarkov)
     H = round((3 - g.alpha) / 2; digits = 4)
     print(io, "OnOffMarkov{$(typeof(g.alphabet))}",

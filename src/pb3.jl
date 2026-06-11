@@ -74,6 +74,20 @@ function WaveletMarkov(H::Real, alphabet,
                                                cascade_depth)
 end
 
+"""
+    WaveletMarkov(H, specs; regime_weights = uniform, cascade_depth = auto)
+
+Construct a [`WaveletMarkov`](@ref) generator from one [`MarkovSpec`](@ref) per
+latent regime. All specifications must use the same ordered alphabet.
+"""
+function WaveletMarkov(H::Real, specs::AbstractVector{<:MarkovSpec};
+                       regime_weights::AbstractVector{<:Real} =
+                           fill(1.0 / length(specs), length(specs)),
+                       cascade_depth::Int = 0)
+    alphabet, Ps = unpack_markov_specs(specs)
+    return WaveletMarkov(H, alphabet, Ps; regime_weights, cascade_depth)
+end
+
 function Base.show(io::IO, g::WaveletMarkov)
     print(io, "WaveletMarkov{$(typeof(g.alphabet)), $(typeof(g.regime_weights))}",
           "(H=$(g.H), k=$(length(g.alphabet)), R=$(length(g.transition_matrices)))")

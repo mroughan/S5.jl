@@ -12,6 +12,9 @@ LRDGenerator
 ```@docs
 generate
 save_sequence
+MarkovSpec
+ControlCapabilities
+control_capabilities
 ```
 
 ## Property-based generators

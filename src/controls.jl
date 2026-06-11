@@ -17,3 +17,16 @@ function target_marginal(g::OnOffMarkov)
     return p
 end
 target_marginal(g::FSS) = Float64.(g.rates) ./ sum(g.rates)
+
+control_capabilities(::SpectralFGN) =
+    ControlCapabilities(:exact, :finite_sample, :induced, :induced, :approximate)
+control_capabilities(::LGCM) =
+    ControlCapabilities(:exact, :empirical, :induced, :induced, :latent_approximate)
+control_capabilities(::WaveletMarkov) =
+    ControlCapabilities(:exact, :implied, :per_regime, :induced, :latent_approximate)
+control_capabilities(::LAMP) =
+    ControlCapabilities(:exact, :innovation_target, :induced, :induced, :finite_history)
+control_capabilities(::OnOffMarkov) =
+    ControlCapabilities(:exact, :implied, :per_regime, :induced, :nominal)
+control_capabilities(::FSS) =
+    ControlCapabilities(:exact, :asymptotic, :induced, :induced, :nominal)

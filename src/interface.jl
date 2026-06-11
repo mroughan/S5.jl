@@ -10,6 +10,87 @@ Concrete subtypes must implement:
 abstract type LRDGenerator end
 
 """
+    MarkovSpec(alphabet, transition_matrix)
+
+Validated first-order Markov specification over an ordered symbol alphabet.
+
+`transition_matrix[i, j]` is the conditional probability of emitting
+`alphabet[j]` after `alphabet[i]`.
+
+# Examples
+```julia
+julia> spec = MarkovSpec([:a, :b], [0.9 0.1; 0.2 0.8])
+MarkovSpec{Vector{Symbol}}(k=2)
+
+julia> spec.transition_matrix[1, :]
+2-element Vector{Float64}:
+ 0.9
+ 0.1
+```
+"""
+struct MarkovSpec{A}
+    alphabet          :: A
+    transition_matrix :: Matrix{Float64}
+
+    function MarkovSpec{A}(alphabet::A,
+                           transition_matrix::Matrix{Float64}) where {A}
+        validate_alphabet(alphabet)
+        k = length(alphabet)
+        size(transition_matrix) == (k, k) ||
+            throw(ArgumentError(
+                "transition_matrix must have size ($k, $k), got $(size(transition_matrix))"))
+        new{A}(alphabet, transition_matrix)
+    end
+end
+
+function MarkovSpec(alphabet, transition_matrix::AbstractMatrix{<:Real})
+    P = validate_transition_matrix(transition_matrix)
+    MarkovSpec{typeof(alphabet)}(alphabet, P)
+end
+
+function Base.show(io::IO, spec::MarkovSpec)
+    print(io, "MarkovSpec{$(typeof(spec.alphabet))}(k=$(length(spec.alphabet)))")
+end
+
+"""
+    ControlCapabilities
+
+Programmatic description of a generator's user-facing control strengths.
+
+Fields use stable symbolic levels:
+
+- `alphabet`: `:exact`
+- `marginal`: `:finite_sample`, `:empirical`, `:implied`,
+  `:innovation_target`, or `:asymptotic`
+- `bigram`: `:per_regime` or `:induced`
+- `trigram`: `:induced`
+- `lrd`: `:approximate`, `:latent_approximate`, `:finite_history`, or `:nominal`
+"""
+struct ControlCapabilities
+    alphabet :: Symbol
+    marginal :: Symbol
+    bigram   :: Symbol
+    trigram  :: Symbol
+    lrd      :: Symbol
+end
+
+"""
+    control_capabilities(g) -> ControlCapabilities
+
+Return the declared control strengths of generator `g`.
+
+# Examples
+```julia
+julia> control_capabilities(SpectralFGN(0.8, [:a, :b])).marginal
+:finite_sample
+
+julia> control_capabilities(FSS(1.5, [:a, :b])).bigram
+:induced
+```
+"""
+function control_capabilities end
+
+"""
     generate(g, n; rng = Random.default_rng()) -> Vector
 
 Generate a sequence of `n` symbols using LRD generator `g`.

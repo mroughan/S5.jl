@@ -14,5 +14,6 @@ using S5
     include("test_mb2.jl")
     include("test_mb3.jl")
     include("test_marginal_control.jl")
+    include("test_local_structure.jl")
     include("test_io.jl")
 end

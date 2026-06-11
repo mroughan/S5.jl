@@ -13,6 +13,11 @@
 
         g2 = WaveletMarkov(0.7, ["x", "y"], [P1]; cascade_depth = 4)
         @test g2.cascade_depth == 4
+
+        specs = [MarkovSpec([:a, :b], P1), MarkovSpec([:a, :b], P2)]
+        g3 = WaveletMarkov(0.8, specs; regime_weights = [0.4, 0.6])
+        @test g3.alphabet == [:a, :b]
+        @test g3.transition_matrices == [P1, P2]
     end
 
     @testset "Constructor — argument errors" begin
@@ -24,6 +29,9 @@
         @test_throws ArgumentError WaveletMarkov(0.8, [:a, :b], [P1, P2]; regime_weights = [1.0])
         @test_throws ArgumentError WaveletMarkov(0.8, [:a, :b], [P1, P2]; regime_weights = [0.4, 0.4])
         @test_throws ArgumentError WaveletMarkov(0.8, [:a, :b], [P1, P2]; cascade_depth = -1)
+        @test_throws ArgumentError WaveletMarkov(0.8, MarkovSpec[])
+        @test_throws ArgumentError WaveletMarkov(
+            0.8, [MarkovSpec([:a, :b], P1), MarkovSpec(["a", "b"], P2)])
     end
 
     @testset "generate — output type and length" begin

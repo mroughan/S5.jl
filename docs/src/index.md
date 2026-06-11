@@ -81,6 +81,10 @@ tail/decay parameter with a nominal relationship to $H$:
 All implemented generators accept an explicit ordered alphabet. Duplicate alphabet
 entries are rejected because they make empirical frequency tables ambiguous.
 
+Use `control_capabilities(g)` to inspect the strength and scope of the controls a
+generator claims. It distinguishes direct finite-sample or empirical controls from
+implied, asymptotic, induced, latent, and nominal behavior.
+
 | Type | Marginal control | Local structure control |
 |------|------------------|-------------------------|
 | `SpectralFGN` | direct `marginal`; rank binning gives integer counts as close as possible to target | none |
@@ -89,6 +93,21 @@ entries are rejected because they make empirical frequency tables ambiguous.
 | `LAMP` | direct `marginal` mixed through `epsilon`; larger `epsilon` improves marginal control | history-weighted dependence, not arbitrary bigrams |
 | `OnOffMarkov` | aggregate stationary marginal implied by regimes | per-regime bigram matrices |
 | `FSS` | asymptotic `rates / sum(rates)` | none |
+
+First-order local structure can be represented by a validated `MarkovSpec`:
+
+```julia
+spec = MarkovSpec([:a, :b], [0.9 0.1; 0.2 0.8])
+g1 = WaveletMarkov(0.8, [spec, spec])
+g2 = OnOffMarkov(1.5, [spec, spec], [0.2 0.8; 0.8 0.2])
+
+control_capabilities(g1).bigram
+```
+
+`WaveletMarkov` and `OnOffMarkov` provide `:per_regime` bigram control. Their
+aggregate observed bigrams depend on regime differences and switching behavior. If
+all regimes use the same `MarkovSpec`, that common transition matrix is also the
+unambiguous aggregate target.
 
 For `WaveletMarkov` and `OnOffMarkov`, one-hot symbol diagnostics need regimes
 with different stationary symbol distributions. If each regime has the same
@@ -99,6 +118,7 @@ Reproducible controllability studies live in `validation/`, for example:
 
 ```julia
 julia --project=. validation/marginal_control.jl
+julia --project=. validation/local_structure.jl
 julia --project=. validation/lrd_method_diagnostics.jl
 ```
 

@@ -35,7 +35,7 @@ Not yet implemented:
 
 - [ ] Benchmark suite.
 - [x] Initial simulation studies of marginal controllability.
-- [ ] Expanded simulation studies of local-structure controllability.
+- [x] Expanded simulation studies of local-structure controllability.
 
 Deferred to a future estimation package:
 
@@ -137,7 +137,7 @@ Current capability:
 
 Tasks:
 
-- [ ] Define a short-range specification type, for example:
+- [x] Define a short-range specification type, for example:
       `MarkovSpec(alphabet, transition_matrix)` for bigram control.
 - [ ] Consider a higher-order form for trigram control, e.g. a sparse mapping from
       `(previous_symbol_1, previous_symbol_2)` to next-symbol probabilities.
@@ -145,7 +145,7 @@ Tasks:
       empirical unigram, bigram, and trigram frequency tables;
       total variation distance from a target table;
       row-wise transition error for Markov matrices.
-- [ ] Add capability docs: each generator should state whether it supports
+- [x] Add capability docs: each generator should state whether it supports
       `:marginal`, `:bigram`, `:trigram`, and how strongly.
 - [x] Use these specs first in `MB2`, then in `PB3`.
 
@@ -171,7 +171,7 @@ controls.
 Keep these separate from fast unit tests if runtime becomes large.
 
 - [x] `test/marginal_control.jl`: repeated simulations for each implemented generator.
-- [ ] `test/local_structure.jl`: empirical bigram/trigram tools, initially tested on
+- [x] `test/local_structure.jl`: empirical bigram/trigram tools, initially tested on
       simple iid and Markov baselines.
 - [ ] Decide whether large simulations belong under `test/` with `@testset`, under
       `validation/`, or under `examples/` as reproducible scripts.

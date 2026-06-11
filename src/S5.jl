@@ -38,6 +38,7 @@ using Statistics: mean, std
 import IncCSV
 
 export LRDGenerator, generate, save_sequence
+export MarkovSpec, ControlCapabilities, control_capabilities
 export SpectralFGN, LGCM, WaveletMarkov, LAMP, OnOffMarkov, FSS
 export target_marginal, empirical_marginal, empirical_bigram, empirical_trigram
 export bin_counts, total_variation, rowwise_total_variation

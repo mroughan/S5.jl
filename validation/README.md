@@ -26,6 +26,21 @@ offsets over an `n × k` matrix. Increase `replicates`, `ns`, or
 Keep generated data out of the repository unless a result table is intentionally being
 tracked.
 
+## Local Structure Control
+
+Run from the package root:
+
+```julia
+julia --project=. validation/local_structure.jl
+```
+
+The script measures row-wise and aggregate transition-matrix total variation for
+`WaveletMarkov` and `OnOffMarkov` across iid, persistent, and cyclic first-order
+Markov specifications. Each method uses identical `MarkovSpec` values in every
+regime, so the common transition matrix is an unambiguous aggregate bigram target.
+This study does not claim that mixtures of different regime specifications have a
+simple aggregate target.
+
 ## LRD Method Diagnostics
 
 Run from the package root:

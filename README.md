@@ -52,20 +52,20 @@ its autocovariance function (ACF) decays as a power law,
 
 $$\gamma_k \sim c_\gamma |k|^{-\beta}, \quad \beta \in (0, 1),$$
 
-so that the sum of the tail ACF diverges. LRD is characterised by two closely related
+so that the sum of the tail ACF diverges. LRD is characterised by closely related
 parameters: the ACF decay exponent $\beta$, the spectral exponent $\alpha = 1 - \beta$,
-and the Hurst parameter $H = (2 - \beta)/2 \in (1/2, 1)$.
+and the Hurst parameter $H = (2 - \beta)/2$ with $H \in (1/2, 1)$.
 
 LRD is ubiquitous in human-generated data (text, Internet traffic, genomics, social
 media), yet almost all synthesis tools target numerical data. S5.jl fills that gap for
 **symbol sequences** — data that takes values in a finite, unordered alphabet such as
-`{a, b, c, ...}`.
+`{Orange, Apple,  Pear, ...}` or `{G, A, C, T}`.
 
 ---
 
 ## Implemented Methods
 
-All six synthesis methods from the current S5 roadmap are implemented.
+Methods are broadly classified into **property-based** and **model-based**. The former largely aim to synthesize LRD by starting with a numerical sequence with known LRD properties and then crafting a symbolic sequence by transforming the numerical data. The latter start from a model that has properties such as hierarchical structure or power-law distributed times to drive the sequence generation directly.
 
 ### Property-Based Methods
 

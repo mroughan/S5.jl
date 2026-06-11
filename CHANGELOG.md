@@ -17,6 +17,12 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Separate GitHub Actions workflows for package tests, Aqua quality checks, JET
   static analysis, Codecov coverage uploads, and Documenter builds and deployment.
 - Latest-Julia-only Aqua and JET quality scripts under `quality/`.
+- `MarkovSpec`, a validated reusable first-order local-structure specification,
+  with convenience constructors for `WaveletMarkov` and `OnOffMarkov`.
+- `ControlCapabilities` and `control_capabilities(g)` for programmatic,
+  strength-aware generator control contracts.
+- A reproducible local-structure validation study and focused tests for
+  per-regime Markov specifications and aggregate bigram control.
 
 ### Changed
 - Added explicit compatibility bounds for standard-library dependencies so Aqua
