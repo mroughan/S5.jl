@@ -223,7 +223,8 @@ a finite-sample `n / 10` lag limit, and explicit generator limits where they
 exist, such as `LAMP.d`. Spectrum plots show the same scales as reciprocal
 frequencies. Autocorrelation plots also include a gray dashed nominal
 power-law reference line with slope `lag^(-beta)`, anchored to the first positive
-plotted autocorrelation value.
+plotted autocorrelation value. Power-spectrum plots include the corresponding
+gray dashed low-frequency reference with slope `frequency^(beta - 1)`.
 
 Validation policy is documented in `VALIDATION_POLICY.md`. The fast package test
 suite remains the main development pathway, while larger empirical studies are run

@@ -47,6 +47,8 @@
     @test contains(diagnostic_script, "diagnostic_lag_limit")
     @test contains(diagnostic_script, "stroke-dasharray")
     @test contains(diagnostic_script, "intrinsic_lag_limit(g::LAMP)")
-    @test contains(diagnostic_script, "power_law_reference")
-    @test contains(diagnostic_script, "nominal power-law beta=")
+    @test contains(diagnostic_script, "acf_power_law_reference")
+    @test contains(diagnostic_script, "spectrum_power_law_reference")
+    @test contains(diagnostic_script, "nominal ACF beta=")
+    @test contains(diagnostic_script, "nominal spectrum beta=")
 end

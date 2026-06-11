@@ -68,8 +68,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Changed the default `WaveletMarkov` PB3 latent driver from the original
   Haar-style cascade to the spectral fGn rank-binning path, and recorded the
   driver choice in INC provenance metadata.
-- Added nominal exact power-law reference overlays to autocorrelation validation
-  SVG plots.
+- Added nominal exact power-law reference overlays to autocorrelation and
+  power-spectrum validation SVG plots.
 - Removed the now-redundant status column from README method summary tables.
 
 ## [0.1.0] — 2026-06-04

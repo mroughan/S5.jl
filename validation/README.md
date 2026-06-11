@@ -113,10 +113,11 @@ interpreted deep into the range where too few overlapping pairs remain. On power
 spectrum plots this same scale is shown as frequency `10 / n`. Methods with an
 explicit internal memory limit may add a second dashed line; for example, `LAMP`
 and `DyadicLAMP` mark their configured history depth `d`.
-Autocorrelation plots also include a gray dashed nominal power-law reference line,
-anchored at the first positive plotted autocorrelation value, with slope
-`lag^(-beta)`. The reference uses each generator's nominal decay exponent and is
-visual guidance, not a fitted curve.
+Autocorrelation and power-spectrum plots also include gray dashed nominal
+power-law reference lines, anchored at the first positive plotted value. The ACF
+reference has slope `lag^(-beta)`, while the spectral-density reference has the
+corresponding low-frequency slope `frequency^(beta - 1)`. The references use each
+generator's nominal decay exponent and are visual guidance, not fitted curves.
 
 These limits are visual guidance only. They do not prove LRD behavior, and they
 make visible when poor diagnostics are caused by a generator's own truncation

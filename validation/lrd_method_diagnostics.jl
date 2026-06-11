@@ -147,21 +147,36 @@ nominal_acf_decay_exponent(g::Union{SpectralFGN,LGCM,WaveletMarkov}) = 2 - 2g.H
 nominal_acf_decay_exponent(g::Union{LAMP,DyadicLAMP}) = g.beta
 nominal_acf_decay_exponent(g::Union{OnOffMarkov,FSS}) = g.alpha - 1
 
-function power_law_reference(x::AbstractVector{<:Real}, y::AbstractVector{<:Real}, g)
-    beta = nominal_acf_decay_exponent(g)
+function nominal_reference_line(x::AbstractVector{<:Real}, y::AbstractVector{<:Real};
+                                exponent::Real, label::AbstractString)
     pts = [(Float64(xi), Float64(yi)) for (xi, yi) in zip(x, y)
            if xi > 0 && yi > 0 && isfinite(xi) && isfinite(yi)]
     isempty(pts) && return NamedTuple[]
     sort!(pts; by = first)
     x0, y0 = first(pts)
-    ref = [(xi, y0 * (xi / x0)^(-beta)) for (xi, _) in pts]
+    exp = Float64(exponent)
+    ref = [(xi, y0 * (xi / x0)^exp) for (xi, _) in pts]
     return [(;
         x = first.(ref),
         y = last.(ref),
-        label = "nominal power-law beta=$(round(beta; digits = 3))",
+        label,
         color = "#555555",
         dash = "4 4",
     )]
+end
+
+function acf_power_law_reference(x::AbstractVector{<:Real}, y::AbstractVector{<:Real}, g)
+    beta = nominal_acf_decay_exponent(g)
+    return nominal_reference_line(x, y;
+        exponent = -beta,
+        label = "nominal ACF beta=$(round(beta; digits = 3))")
+end
+
+function spectrum_power_law_reference(x::AbstractVector{<:Real}, y::AbstractVector{<:Real}, g)
+    beta = nominal_acf_decay_exponent(g)
+    return nominal_reference_line(x, y;
+        exponent = beta - 1,
+        label = "nominal spectrum beta=$(round(beta; digits = 3))")
 end
 
 function write_loglog_svg(path, title, xlabel, ylabel, x, y;
@@ -316,13 +331,16 @@ function run_lrd_diagnostics(; n::Int = DEFAULT_N,
                          "lag", "positive average autocorrelation",
                          b_lags, b_acf;
                          vertical_lines = acf_limit_annotations(diagnostic_gen, n),
-                         reference_lines = power_law_reference(b_lags, b_acf,
-                                                               diagnostic_gen))
+                         reference_lines = acf_power_law_reference(b_lags, b_acf,
+                                                                   diagnostic_gen))
         write_loglog_svg(joinpath(plotdir, "$(method)_power_spectrum.svg"),
                          "$method average power spectrum",
                          "frequency", "average periodogram",
                          b_freqs, b_power;
-                         vertical_lines = spectrum_limit_annotations(diagnostic_gen, n))
+                         vertical_lines = spectrum_limit_annotations(diagnostic_gen, n),
+                         reference_lines = spectrum_power_law_reference(b_freqs,
+                                                                        b_power,
+                                                                        diagnostic_gen))
     end
 
     write_diagnostic_inc(
