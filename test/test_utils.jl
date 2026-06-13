@@ -105,20 +105,26 @@ end
             SpectralFGN(0.8, [:a, :b]),
             LGCM(0.8, [:a, :b]),
             WaveletMarkov(0.8, [:a, :b], [P]),
+            IntermittentMapSymbols(1.6, [:a, :b]),
             LAMP(0.5, [:a, :b]),
             DyadicLAMP(0.5, [:a, :b]),
+            CalibratedAdditiveMarkov(0.5, [:a, :b]),
             OnOffMarkov(1.5, [:a, :b], [P, P], Q),
             FSS(1.5, [:a, :b]),
             HawkesSymbol(0.6, [:a, :b]),
+            DuplicationMutation(1.5, [:a, :b]),
         )
 
         capabilities = control_capabilities.(generators)
         @test all(c.alphabet == :exact for c in capabilities)
         @test capabilities[1].marginal == :finite_sample
         @test capabilities[3].bigram == :per_regime
-        @test capabilities[6].bigram == :per_regime
-        @test capabilities[7].marginal == :asymptotic
-        @test capabilities[8].marginal == :implied
+        @test capabilities[4].lrd == :latent_empirical
+        @test capabilities[7].marginal == :centered_target
+        @test capabilities[8].bigram == :per_regime
+        @test capabilities[9].marginal == :asymptotic
+        @test capabilities[10].marginal == :implied
+        @test capabilities[11].marginal == :mutation_target
         @test all(c.trigram == :induced for c in capabilities)
     end
 

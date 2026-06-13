@@ -22,6 +22,11 @@ Implemented:
 - [x] `OnOffMarkov` (MB2): heavy-tailed regime-switching Markov chain.
 - [x] `FSS` (MB3): Fractal Symbol Sequence via independent Pareto renewal streams.
 - [x] `HawkesSymbol` (MB4): finite-history Hawkes-style self-exciting symbol process.
+- [x] `IntermittentMapSymbols` (PB4): intermittent-map latent driver plus quantization.
+- [x] `CalibratedAdditiveMarkov` (MB1c): centered additive Markov-chain memory
+      function.
+- [x] `DuplicationMutation` (MB5): power-law lag copy/mutate symbolic growth
+      generator.
 - [x] INC output with provenance metadata via `save_sequence`.
 - [x] Basic unit tests for construction, output length/type, alphabet membership, and
       simple marginal checks.
@@ -225,6 +230,43 @@ Useful metrics:
 ---
 
 ## Priority 4: Next Generators
+
+### Candidate Future Generators From The Literature
+
+Recent bibliography work suggests three plausible generator directions beyond
+the current PB/MB set:
+
+- [x] **Additive Markov chain with prescribed memory function.** Melnyk,
+      Usatenko, and Yampol'skii (2006), Mayzelis et al. (2006), and Melnik and
+      Usatenko (2014) give a finite-alphabet additive Markov-chain route from
+      desired pair correlations to memory functions. This is the strongest
+      candidate for a more principled successor or extension to MB1 because it
+      could expose explicit target-correlation controls while preserving a
+      symbolic generator identity. Implemented initially as
+      `CalibratedAdditiveMarkov`, with full correlation calibration left for
+      future refinement.
+- [x] **Expansion-modification / duplication-mutation symbolic generator.** Li's
+      expansion-modification model and later duplication-mutation DNA work
+      provide a natural symbolic mechanism for DNA-like sequences. This is a
+      good candidate if S5.jl adds a generator whose scientific identity is
+      copy-mutate growth rather than latent Gaussian, LAMP, or renewal-process
+      synthesis. Implemented initially as `DuplicationMutation`; the current
+      version uses a power-law copy-distance kernel after validation showed that
+      power-law block lengths with uniform source selection gave nearly flat
+      autocorrelation.
+- [ ] **Hierarchical text/rare-event generator.** Alvarez-Lacalle et al. (2006),
+      Altmann et al. (2009, 2012), Tanaka-Ishii and Bunde (2016), and Ogura et
+      al. (2022) suggest text-oriented mechanisms based on document hierarchy,
+      rare-word clustering, and bursty point processes. This may belong as a
+      validation/application model rather than as a core generator unless the
+      controls can be stated cleanly.
+- [x] **Intermittent-map symbolic generator.** Provata and Beck (2012) show that
+      coupled intermittent maps can create DNA-like symbolic statistics. This is
+      less immediate for S5.jl because map parameters do not directly translate
+      to alphabet, marginal, bigram, and LRD control contracts, but it is worth
+      keeping as a lower-priority research candidate. Implemented initially as
+      `IntermittentMapSymbols`, with the API explicitly framed as a latent
+      empirical driver.
 
 ### MB2: Heavy-Tailed On/Off Doubly-Stochastic Markov Chain
 

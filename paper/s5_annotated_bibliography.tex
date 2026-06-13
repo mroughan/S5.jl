@@ -203,6 +203,39 @@ FSS and On/Off methods.
 
 \subsection{Symbolic and Categorical Models}
 
+\subsubsection{DNA and Genomic Sequence Applications}
+
+\paragraph{Peng et al. (1992).}
+\emph{Long-range correlations in nucleotide sequences.}
+This Nature paper is one of the standard starting points for the DNA LRD
+literature. It treats nucleotide strings as symbolic sequences whose large-scale
+fluctuations can differ between coding and noncoding regions, making it a direct
+application-side precedent for S5.jl's interest in categorical long memory.
+
+\paragraph{Li and Kaneko (1992).}
+\emph{Long-range correlation and partial $1/f$ spectrum in a noncoding DNA
+sequence.}
+This paper is an early noncoding-DNA contribution to the same debate. It is
+important for S5.jl because it links categorical sequence structure, spectra,
+and genome organization while also reminding us that a fitted spectral slope is
+an empirical claim about a finite symbolic record.
+
+\paragraph{Voss (1992).}
+\emph{Evolution of long-range fractal correlations and $1/f$ noise in DNA base
+sequences.}
+Voss is another early application paper connecting base sequences with fractal
+correlation and spectral language. It belongs in the bibliography as a classic
+DNA application reference, even though S5.jl should continue to describe its own
+generators as finite simulations rather than as biological genome models.
+
+\paragraph{Buldyrev et al. (1998).}
+\emph{Analysis of DNA sequences using methods of statistical physics.}
+This review summarizes DNA-walk, fluctuation, and detrended-fluctuation
+approaches to noncoding and coding DNA. It is useful for S5.jl because it shows
+how symbolic biological data are commonly transformed before LRD diagnostics,
+and because it emphasizes finite-length, patchiness, and coding/noncoding
+distinctions.
+
 \paragraph{Li, Marr, and Kaneko (1994).}
 \emph{Understanding long-range correlations in DNA sequences.}
 This early review-style paper is directly relevant to non-numerical LRD because
@@ -210,6 +243,14 @@ DNA is naturally categorical. It connects empirical DNA correlations with
 expansion-modification mechanisms, making it one of the clearest precedents for
 symbolic generators whose memory is not merely inherited from a latent numeric
 time series.
+
+\paragraph{Buldyrev (2006/2013).}
+\emph{Power law correlations in DNA sequences.}
+This book chapter reviews power-law correlation evidence and interpretation for
+DNA, with emphasis on noncoding DNA, patchiness, repeated sequences, and
+duplication-related evolutionary mechanisms. It is valuable as a broad
+application survey and as a source of further DNA references, but it should be
+used as review context rather than as a single definitive statistical claim.
 
 \paragraph{Salgado-García and Ugalde (2012).}
 \emph{Exact scaling in the expansion-modification system.}
@@ -224,6 +265,15 @@ This paper models DNA correlations using an Ising-style construction. It is a
 useful reminder that symbolic biological sequences can be studied through both
 direct categorical encodings and latent energy/state models.
 
+\subsubsection{Text and Language Applications}
+
+\paragraph{Schenkel, Zhang, and Zhang (1993).}
+\emph{Long range correlation in human writings.}
+This early application paper studies human writing directly as a symbolic
+sequence. It is useful historical context for the later literature because it
+places text alongside DNA as a domain where long correlations are measured in
+strings rather than in naturally numerical observations.
+
 \paragraph{Ebeling and Pöschel (1994).}
 \emph{Entropy and long range correlations in literary English.}
 This paper studies long-range correlations in text using symbolic letters and
@@ -231,6 +281,53 @@ entropy-like quantities. It supports an S5.jl use case beyond numerical ACFs:
 controlled symbolic sequences can help test whether entropy-rate, mutual
 information, and block-complexity diagnostics recover known long-context
 structure.
+
+\paragraph{Montemurro and Pury (2002).}
+\emph{Long-range fractal correlations in literary corpora.}
+This paper maps literary corpora to word-level symbolic time series and reports
+long-range correlations beyond sentence-scale syntax. It is particularly useful
+for S5.jl because it keeps words, rather than arbitrary letter encodings, as the
+basic objects being analyzed.
+
+\paragraph{Alvarez-Lacalle et al. (2006).}
+\emph{Hierarchical structures induce long-range dynamic correlations in written
+texts.}
+This PNAS paper gives an application-side explanation for text correlations:
+large-scale document organization can induce persistent correlations at smaller
+symbolic levels. That mechanism is closely related to why S5.jl keeps
+hierarchical and regime-based generators separate from simple finite-order
+Markov structure.
+
+\paragraph{Altmann, Pierrehumbert, and Motter (2009).}
+\emph{Beyond word frequency: bursts, lulls, and scaling in the temporal
+distributions of words.}
+This paper studies recurrence-time structure for words, emphasizing bursty word
+use and scaling that cannot be inferred from Zipf frequencies alone. It is an
+application-focused bridge between natural-language data and the bursty symbolic
+generators in S5.jl.
+
+\paragraph{Altmann, Cristadoro, and Degli Esposti (2012).}
+\emph{On the origin of long-range correlations in texts.}
+This paper argues that correlations in text can flow from high-level semantic or
+topic organization down to words and letters. It is a useful companion to the
+Hawkes-style and hierarchical models because it frames word occurrences as
+bursty events tied to semantically meaningful structure.
+
+\paragraph{Drożdż et al. (2016).}
+\emph{Quantifying origin and character of long-range correlations in narrative
+texts.}
+This paper studies sentence-length variability and reports spectral and
+multifractal evidence for long-range structure in narrative texts. It is a
+valuable application reference, especially when paired with Zeng et al. (2025),
+because it shows both the attraction and the risk of interpreting finite text
+statistics as LRD evidence.
+
+\paragraph{Tanaka-Ishii and Bunde (2016).}
+\emph{Long-range memory in literary texts: on the universal clustering of the
+rare words.}
+This paper focuses on rare-word clustering in literary texts. It is relevant to
+S5.jl because rare-symbol recurrence can be a stronger application diagnostic
+than aggregate autocorrelation after an arbitrary numeric encoding.
 
 \paragraph{Ogura, Hanada, Amano, and Kondo (2022).}
 \emph{Modeling long-range dynamic correlations of words in written texts with
@@ -243,6 +340,51 @@ time-series events and validates simulated point-process outputs against word
 occurrence autocorrelation functions. The MB4 `HawkesSymbol` generator is a
 finite-history discrete-time adaptation of this self-exciting point-process
 idea, not a fitted text model.
+
+\paragraph{Montemurro and Degli Esposti (2026).}
+\emph{A Zipf-preserving, long-range correlated surrogate for written language
+and other symbolic sequences.}
+This recent paper is highly aligned with S5.jl's symbolic goals: it constructs
+surrogate sequences that preserve empirical symbol frequencies while imposing
+long-range scaling through an fGn-based assignment. It is both a recent text/DNA
+application reference and a reminder that preserving marginals and preserving
+correlation structure are separate controls.
+
+\subsubsection{Symbolic Generative and Analytical Models}
+
+\paragraph{Li (1989, 1991) and Li (1992).}
+\emph{Expansion-modification systems and replication-mutation generators.}
+Li's expansion-modification line is one of the most natural symbolic simulation
+families for S5.jl to revisit. The mechanism repeatedly copies and mutates
+symbols or blocks, producing symbolic sequences with spatial $1/f$ spectra and
+long correlations. It is especially attractive for DNA-like applications because
+the mechanism is symbolic from the start and has a biological interpretation via
+duplication and mutation.
+
+\paragraph{Melnyk, Usatenko, and Yampol'skii (2006).}
+\emph{Memory functions of the additive Markov chains: applications to complex
+dynamic systems.}
+This paper gives an explicit route from a desired pair-correlation function to a
+memory function for additive Markov chains. It is an important candidate model
+for S5.jl because it suggests a more principled future version of LAMP/MB1:
+instead of choosing a power-law history kernel directly, one can derive or
+approximate a memory function for a target symbolic correlation profile.
+
+\paragraph{Mayzelis et al. (2006).}
+\emph{Additive $N$-step Markov chains as prototype model of symbolic stochastic
+dynamical systems with long-range correlations.}
+This paper generalizes binary additive Markov chains, including biased symbol
+frequencies, and verifies analytical correlation and word-count variance results
+by simulation. It supports an S5.jl future path toward additive Markov generators
+with clearer correlation-function control than the current finite-history LAMP
+interface.
+
+\paragraph{Melnik and Usatenko (2014).}
+\emph{Entropy and long-range correlations in random symbolic sequences.}
+This paper develops entropy estimates for finite-alphabet long-correlated
+symbolic sequences and applies them to written English and DNA nucleotide
+sequences. It is useful for S5.jl because it connects high-order additive Markov
+models, pair correlations, and entropy diagnostics in the same symbolic setting.
 
 \paragraph{Gal, Chen, and Ghahramani (2015).}
 \emph{Latent Gaussian processes for distribution estimation of multivariate
@@ -257,7 +399,27 @@ for marginal control.
 This paper motivates MB1. LAMP models make transition probabilities additive in
 past observations, allowing long-range memory to be encoded through a decay
 kernel over history. S5.jl implements a finite-depth version with a marginal
-innovation term.
+innovation term. The correct WWW 2017 citation uses DOI
+\texttt{10.1145/3038912.3052644}; earlier notes with a different suffix were
+stale.
+
+\paragraph{Koroteev (2015).}
+\emph{On a chain of fragmentation equations for duplication-mutation dynamics in
+DNA sequences.}
+This paper studies duplication-mutation dynamics and exact-repeat length
+distributions in synthetic and natural DNA. It is not directly an LRD generator
+paper, but it strengthens the case for a future DNA-oriented symbolic generator
+based on block duplication, mutation, and finite-sequence provenance.
+
+\paragraph{Provata and Beck (2012).}
+\emph{Coupled intermittent maps modelling the statistics of genomic sequences: a
+network approach.}
+This paper uses coupled intermittent maps to generate symbolic sequences with
+DNA-like long-range features. It is an interesting candidate mechanism, but it is
+less immediately aligned with S5.jl than additive Markov or duplication-mutation
+models because the controllable user-facing parameters would need careful
+translation from map dynamics to alphabet, marginal, and local-structure
+contracts.
 
 \paragraph{Singh, Greenberg, and Klakow (2016).}
 \emph{The custom decay language model for long range dependencies.}

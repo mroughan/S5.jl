@@ -120,6 +120,33 @@ function _build_metadata(gen::WaveletMarkov, n::Int, created::String)
     )
 end
 
+function _build_metadata(gen::IntermittentMapSymbols, n::Int, created::String)
+    k   = length(gen.alphabet)
+    alp = join(string.(gen.alphabet), ",")
+    mar = join(string.(round.(gen.marginal; digits = 8)), ",")
+    Dict(
+        "title"     => "S5.jl synthetic LRD symbol sequence",
+        "package"   => "S5",
+        "version"   => string(pkgversion(@__MODULE__)),
+        "created"   => created,
+        "n"         => n,
+        "generator" => "IntermittentMapSymbols",
+        "method"    => "PB4",
+        "generator_params" => Dict(
+            "z"             => string(gen.z),
+            "burnin"        => gen.burnin,
+            "alphabet_size" => k,
+            "alphabet"      => alp,
+            "marginal"      => mar,
+            "latent_driver" => "Pomeau-Manneville-style intermittent map",
+        ),
+        "columns" => Dict(
+            "index"  => "time index (1-based)",
+            "symbol" => "generated symbol from the alphabet",
+        ),
+    )
+end
+
 function _build_metadata(gen::LAMP, n::Int, created::String)
     k   = length(gen.alphabet)
     alp = join(string.(gen.alphabet), ",")
@@ -141,6 +168,34 @@ function _build_metadata(gen::LAMP, n::Int, created::String)
             "alphabet"      => alp,
             "marginal"      => mar,
             "transition_matrix" => P,
+        ),
+        "columns" => Dict(
+            "index"  => "time index (1-based)",
+            "symbol" => "generated symbol from the alphabet",
+        ),
+    )
+end
+
+function _build_metadata(gen::CalibratedAdditiveMarkov, n::Int, created::String)
+    k   = length(gen.alphabet)
+    alp = join(string.(gen.alphabet), ",")
+    mar = join(string.(round.(gen.marginal; digits = 8)), ",")
+    Dict(
+        "title"     => "S5.jl synthetic LRD symbol sequence",
+        "package"   => "S5",
+        "version"   => string(pkgversion(@__MODULE__)),
+        "created"   => created,
+        "n"         => n,
+        "generator" => "CalibratedAdditiveMarkov",
+        "method"    => "MB1c",
+        "generator_params" => Dict(
+            "beta"          => string(gen.beta),
+            "d"             => gen.d,
+            "strength"      => string(gen.strength),
+            "alphabet_size" => k,
+            "alphabet"      => alp,
+            "marginal"      => mar,
+            "memory_function" => "centered additive power law",
         ),
         "columns" => Dict(
             "index"  => "time index (1-based)",
@@ -259,6 +314,35 @@ function _build_metadata(gen::HawkesSymbol, n::Int, created::String)
             "excitation"    => E,
             "kernel"        => "normalized power law",
             "time_model"    => "discrete",
+        ),
+        "columns" => Dict(
+            "index"  => "time index (1-based)",
+            "symbol" => "generated symbol from the alphabet",
+        ),
+    )
+end
+
+function _build_metadata(gen::DuplicationMutation, n::Int, created::String)
+    k = length(gen.alphabet)
+    alp = join(string.(gen.alphabet), ",")
+    mar = join(string.(round.(gen.marginal; digits = 8)), ",")
+    Dict(
+        "title"     => "S5.jl synthetic LRD symbol sequence",
+        "package"   => "S5",
+        "version"   => string(pkgversion(@__MODULE__)),
+        "created"   => created,
+        "n"         => n,
+        "generator" => "DuplicationMutation",
+        "method"    => "MB5",
+        "generator_params" => Dict(
+            "alpha"                => string(gen.alpha),
+            "mutation_probability" => string(gen.mutation_probability),
+            "seed_length"          => gen.seed_length,
+            "max_block_length"     => gen.max_block_length,
+            "alphabet_size"        => k,
+            "alphabet"             => alp,
+            "marginal"             => mar,
+            "growth_model"         => "power-law lag copy-and-mutate growth",
         ),
         "columns" => Dict(
             "index"  => "time index (1-based)",

@@ -112,8 +112,93 @@ This file tracks local reference PDFs for the paper bibliography.
   - Local file: `paper/downloads/entropy-24-00858.pdf`
   - Match: exact open-access article.
 
+- [x] Gal, Chen, and Ghahramani (2015).
+  "Latent Gaussian processes for distribution estimation of multivariate
+  categorical data."
+  - Local file: `paper/downloads/gal_2015.pdf`
+  - Match: exact ICML paper.
+
+- [x] Li, Marr, and Kaneko (1994).
+  "Understanding long-range correlations in DNA sequences."
+  - Local file:
+    `paper/downloads/understanding-long-range-correlations-in-dna-sequences-3dqiwghqtw.pdf`
+  - Match: exact Physica D article.
+
+- [x] Peng et al. (1992).
+  "Long-range correlations in nucleotide sequences."
+  - Local file: `paper/downloads/peng_et_al_356168a0.pdf`
+  - Match: exact Nature letter.
+
+- [x] Li and Kaneko (1992).
+  "Long-range correlation and partial 1/f spectrum in a noncoding DNA
+  sequence."
+  - Local file: `paper/downloads/li_kaneko_91-07-030.pdf`
+  - Match: Santa Fe Institute working-paper version of the Europhysics Letters
+    article.
+
+- [x] Schenkel, Zhang, and Zhang (1993).
+  "Long range correlation in human writings."
+  - Local file: `paper/downloads/schenkel.pdf`
+  - Match: alternate Symmetry: Culture and Science version; the Fractals
+    publisher version is not local.
+
+- [x] Alvarez-Lacalle et al. (2006).
+  "Hierarchical structures induce long-range dynamic correlations in written
+  texts."
+  - Local file:
+    `paper/downloads/alvarez-lacalle-et-al-2006-hierarchical-structures-induce-long-range-dynamical-correlations-in-written-texts.pdf`
+  - Match: exact PNAS article.
+
+- [x] Tanaka-Ishii and Bunde (2016).
+  "Long-range memory in literary texts: on the universal clustering of the rare
+  words."
+  - Local file: `paper/downloads/tanaka-Ishii_Bunde.pdf`
+  - Match: exact PLOS ONE article.
+
+- [x] Kumar, Raghu, Sarlós, and Tomkins (2017).
+  "Linear additive Markov processes."
+  - Local file: `paper/downloads/LAMP_3038912.3052644.pdf`
+  - Match: exact WWW 2017 article.
+  - Correct DOI: `10.1145/3038912.3052644`.
+
+- [x] Carpio and Daley (2007).
+  "Long-range dependence of Markov chains in discrete time on countable state
+  space."
+  - Local file: `paper/downloads/Carpio-LongRangeDependenceMarkov-2007.pdf`
+  - Match: exact JSTOR article.
+
+- [x] Vaswani et al. (2017).
+  "Attention is all you need."
+  - Local file: `paper/downloads/NIPS-2017-attention-is-all-you-need-Paper.pdf`
+  - Match: exact NeurIPS paper.
+
+- [x] Stein (2002).
+  "Fast and exact simulation of fractional Brownian surfaces."
+  - Local file: `paper/downloads/Stein-FastExactSimulation-2002.pdf`
+  - Match: exact Journal of Computational and Graphical Statistics article.
+
+- [x] Buldyrev (2006/2013).
+  "Power law correlations in DNA sequences."
+  - Local files: `paper/downloads/0-387-33916-7_9.pdf`,
+    `paper/downloads/Power Law Correlations in DNA Sequences - Madame Curie Bioscience Database - NCBI Bookshelf.html`
+  - Match: exact chapter, with both PDF and NCBI Bookshelf HTML snapshots.
+
+- [x] Buldyrev et al. (1998).
+  "Analysis of DNA sequences using methods of statistical physics."
+  - Local file: `paper/downloads/1-s2.0-S0378437197005037-main.pdf`
+  - Match: exact Physica A review article.
+
+- [x] Beran (1994).
+  *Statistics for Long-Memory Processes*.
+  - Local file: none.
+  - Match/status: Matthew owns a print copy; no local PDF is expected.
+
 ## Open PDFs Already Saved In `paper/references/`
 
+- [x] Altmann, Cristadoro, and Degli Esposti (2012).
+  `paper/references/altmann_cristadoro_degli_esposti_2012_origin_lrc_texts.pdf`
+- [x] Altmann, Pierrehumbert, and Motter (2009).
+  `paper/references/altmann_pierrehumbert_motter_2009_bursts_lulls_words.pdf`
 - [x] Bai and Shami (2013).
   `paper/references/bai_shami_2013_modeling_self_similar_traffic_simulation.pdf`
 - [x] Balcerek et al. (2025).
@@ -126,14 +211,30 @@ This file tracks local reference PDFs for the paper bibliography.
   `paper/references/debowski_2015_hilberg_exponents.pdf`
 - [x] Dębowski (2025).
   `paper/references/debowski_2025_zipf_neural_scaling_hilberg.pdf`
+- [x] Drożdż et al. (2016).
+  `paper/references/drozdz_et_al_2016_lrc_narrative_texts.pdf`
 - [x] Ebeling and Pöschel (1994).
   `paper/references/ebeling_poeschel_1994_entropy_lrc_literary_english.pdf`
 - [x] Gelbaum (2012).
   `paper/references/gelbaum_2012_fractional_brownian_fields_manifolds.pdf`
 - [x] Gelbaum and Titus (2013).
   `paper/references/gelbaum_titus_2013_fractional_brownian_surfaces_spectral_synthesis.pdf`
+- [x] Koroteev (2015).
+  `paper/references/koroteev_2015_duplication_mutation_fragmentation_dna.pdf`
+- [x] Mayzelis et al. (2006).
+  `paper/references/mayzelis_et_al_2006_additive_n_step_markov_chains_lrc.pdf`
+- [x] Melnik and Usatenko (2014).
+  `paper/references/melnik_usatenko_2014_entropy_lrc_symbolic_sequences.pdf`
+- [x] Melnyk, Usatenko, and Yampol'skii (2006).
+  `paper/references/melnyk_usatenko_yampolskii_2006_memory_functions_additive_markov_chains.pdf`
 - [x] Millán (2021).
   `paper/references/millan_2021_generation_lrd_traffic_chaotic_maps.pdf`
+- [x] Montemurro and Degli Esposti (2026).
+  `paper/references/montemurro_degli_esposti_2026_zipf_preserving_lrc_surrogate.pdf`
+- [x] Montemurro and Pury (2002).
+  `paper/references/montemurro_pury_2002_lrc_literary_corpora.pdf`
+- [x] Provata and Beck (2012).
+  `paper/references/provata_beck_2012_coupled_intermittent_maps_genomic_sequences.pdf`
 - [x] Salgado-García and Ugalde (2012).
   `paper/references/salgado_garcia_ugalde_2012_exact_scaling_expansion_modification.pdf`
 - [x] Sørbye, Myrvoll-Nilsen, and Rue (2017).
@@ -142,10 +243,6 @@ This file tracks local reference PDFs for the paper bibliography.
   `paper/references/zeng_cui_li_2025_fractal_illusions_sentence_length.pdf`
 
 ## Still To Find
-
-- [ ] `beran_1994_statistics_long_memory_processes.pdf`
-  - Beran, J. (1994). *Statistics for Long-Memory Processes*.
-  - DOI/search: book title and author.
 
 - [ ] `taqqu_teverovsky_willinger_1995_estimators_lrd.pdf`
   - Taqqu, M., Teverovsky, V., & Willinger, W. (1995).
@@ -158,30 +255,15 @@ This file tracks local reference PDFs for the paper bibliography.
   - Note: only a partial related book preview and a related arXiv article are
     currently available locally.
 
-- [ ] `gal_chen_ghahramani_2015_latent_gaussian_categorical.pdf`
-  - Gal, Y., Chen, Y., & Ghahramani, Z. (2015).
-    "Latent Gaussian processes for distribution estimation of multivariate
-    categorical data."
-
-- [ ] `li_marr_kaneko_1994_understanding_lrc_dna.pdf`
-  - Li, W., Marr, T. G., & Kaneko, K. (1994).
-    "Understanding long-range correlations in DNA sequences."
-  - Note: arXiv `chao-dyn/9403002` was found, but tested PDF endpoints returned
-    HTML rather than a PDF on 2026-06-12.
-
-- [ ] `kumar_raghu_sarlos_tomkins_2017_lamp.pdf`
-  - Kumar, R., Raghu, M., Sarlos, T., & Tomkins, A. (2017).
-    "Linear additive Markov processes."
-  - DOI/search: `10.1145/3038912.3052606`
+- [ ] `voss_1992_fractal_correlations_1_f_dna_base_sequences.pdf`
+  - Voss, R. F. (1992).
+    "Evolution of long-range fractal correlations and 1/f noise in DNA base
+    sequences."
+  - DOI/search: Physical Review Letters 68, 3805.
 
 - [ ] `singh_greenberg_klakow_2016_custom_decay_language_model.pdf`
   - Singh, M., Greenberg, C., & Klakow, D. (2016).
     "The custom decay language model for long range dependencies."
-
-- [ ] `carpio_daley_2007_lrd_markov_chains.pdf`
-  - Carpio, K. J. E., & Daley, D. J. (2007).
-    "Long-range dependence of Markov chains in discrete time on countable state
-    space."
 
 - [ ] `crutchfield_feldman_2003_entropy_convergence.pdf`
   - Crutchfield, J. P., & Feldman, D. P. (2003).
@@ -196,9 +278,6 @@ This file tracks local reference PDFs for the paper bibliography.
   - Belletti, F., Beutel, A., Jain, S., & Chi, E. (2018).
     "Factorized recurrent neural architectures for longer range dependence."
 
-- [ ] `vaswani_et_al_2017_attention_is_all_you_need.pdf`
-  - Vaswani, A., et al. (2017). "Attention is all you need."
-
 - [ ] `tay_et_al_2021_long_range_arena.pdf`
   - Tay, Y., et al. (2021). "Long Range Arena: a benchmark for efficient
     transformers."
@@ -209,8 +288,3 @@ This file tracks local reference PDFs for the paper bibliography.
     embeddings."
   - Source/search: title and authors; open PDF not found during the 2026-06-12
     bibliography pass.
-
-- [ ] `stein_2002_fast_exact_simulation_fractional_brownian_surfaces.pdf`
-  - Stein, M. L. (2002).
-    "Fast and exact simulation of fractional Brownian surfaces."
-  - DOI/search: `10.1198/106186002760264577`

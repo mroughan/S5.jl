@@ -11,6 +11,10 @@ LRDGenerator
 
 ```@docs
 generate
+MethodInfo
+method_ids
+method_info
+make_generator
 save_sequence
 LocalStructureSpec
 MarkovSpec
@@ -25,6 +29,7 @@ control_capabilities
 SpectralFGN
 LGCM
 WaveletMarkov
+IntermittentMapSymbols
 ```
 
 ## Model-based generators
@@ -32,9 +37,11 @@ WaveletMarkov
 ```@docs
 LAMP
 DyadicLAMP
+CalibratedAdditiveMarkov
 OnOffMarkov
 FSS
 HawkesSymbol
+DuplicationMutation
 ```
 
 ## Utilities

@@ -3,6 +3,9 @@
 This folder contains reproducible simulation studies for generator controllability.
 These are not LRD estimators. They test whether a generator respects user-facing
 controls such as alphabet membership and target marginal probabilities.
+Standard validation factories should use the explicit scientific constructors
+when a study needs exact parameter visibility; `make_generator` is available for
+smoke tests and examples where standard cases are enough.
 
 The scripts use `StableRNGs.StableRNG` so results are reproducible across Julia
 sessions and package updates.
@@ -20,8 +23,7 @@ julia --project=. validation/marginal_control.jl
 ```
 
 The script prints aggregate total-variation and maximum absolute marginal errors for
-`SpectralFGN`, `LGCM`, `WaveletMarkov`, `LAMP`, `DyadicLAMP`, `OnOffMarkov`,
-`FSS`, and `HawkesSymbol` across a small grid of sequence lengths, alphabet sizes,
+all implemented generators across a small grid of sequence lengths, alphabet sizes,
 and marginal distributions.
 
 `LGCM` is more expensive than the other methods because it calibrates latent
@@ -89,6 +91,10 @@ stationary marginal, these diagnostics can look short-memory even when the
 latent regime process has long-range structure.
 MB4 (`HawkesSymbol`) uses identity excitation so recent symbols increase their
 own future intensity through the configured finite power-law history kernel.
+MB1c (`CalibratedAdditiveMarkov`) uses a centered additive memory function.
+MB5 (`DuplicationMutation`) uses copy-mutate growth with a truncated power-law
+copy-distance kernel. PB4 (`IntermittentMapSymbols`) uses an
+intermittent latent driver followed by rank binning.
 
 The PB3 split is diagnostic evidence rather than a completed calibration claim.
 The legacy Haar cascade tends to retain a high, flat autocorrelation shelf, while
@@ -114,7 +120,9 @@ the finite-sample lag limit `n / 10`, chosen so autocorrelation estimates are no
 interpreted deep into the range where too few overlapping pairs remain. On power
 spectrum plots this same scale is shown as frequency `10 / n`. Methods with an
 explicit internal memory limit may add a second dashed line; for example, `LAMP`,
-`DyadicLAMP`, and `HawkesSymbol` mark their configured history depth `d`.
+`DyadicLAMP`, `CalibratedAdditiveMarkov`, and `HawkesSymbol` mark their
+configured history depth `d`, while `DuplicationMutation` marks its configured
+maximum copy-distance window.
 Autocorrelation and power-spectrum plots also include gray dashed nominal
 power-law reference lines, anchored at the first positive plotted value. The ACF
 reference has slope `lag^(-beta)`, while the spectral-density reference has the

@@ -33,6 +33,18 @@ observable stationary symbol distributions and choose `L_min` large enough for
 heavy-tailed sojourns to appear at the simulated sequence length. Regimes with
 identical stationary marginals can carry latent long memory while looking nearly
 short-memory to one-hot diagnostics.
+
+# Examples
+```julia
+julia> P1 = [0.9 0.1; 0.2 0.8];
+julia> P2 = [0.3 0.7; 0.6 0.4];
+julia> Q = [0.2 0.8; 0.8 0.2];
+julia> g = OnOffMarkov(1.4, [:a, :b], [P1, P2], Q; L_min = 2.0)
+OnOffMarkov{Vector{Symbol}}(α=1.4, H≈0.8, k=2, R=2)
+
+julia> length(generate(g, 64; rng = MersenneTwister(1)))
+64
+```
 """
 struct OnOffMarkov{A} <: LRDGenerator
     alpha               :: Float64
@@ -78,6 +90,13 @@ end
 
 Construct an [`OnOffMarkov`](@ref) generator from one [`MarkovSpec`](@ref) per
 regime. All specifications must use the same ordered alphabet.
+
+# Examples
+```julia
+julia> spec = MarkovSpec([:a, :b], [0.9 0.1; 0.2 0.8]);
+julia> OnOffMarkov(1.4, [spec, spec], [0.2 0.8; 0.8 0.2])
+OnOffMarkov{Vector{Symbol}}(α=1.4, H≈0.8, k=2, R=2)
+```
 """
 function OnOffMarkov(alpha::Real, specs::AbstractVector{<:MarkovSpec},
                      switching_matrix::AbstractMatrix{<:Real};

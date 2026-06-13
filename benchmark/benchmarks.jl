@@ -52,15 +52,22 @@ function _cases(k::Int)
         "PB2_LGCM_iters=8" => LGCM(0.8, alphabet, p; calibration_iters = 8),
         "PB3_WaveletMarkov_spectral_regimes=2" =>
             WaveletMarkov(0.8, alphabet, [P_iid, P_persistent]; driver = :spectral),
+        "PB4_IntermittentMapSymbols_z=1.6" =>
+            IntermittentMapSymbols(1.6, alphabet, p; burnin = 1000),
         "MB1a_LAMP_d=$lamp_d" => LAMP(0.5, alphabet, p; d = lamp_d, epsilon = 0.02),
         "MB1b_DyadicLAMP_d=$dyadic_d" =>
             DyadicLAMP(0.5, alphabet, p; d = dyadic_d, epsilon = 0.02),
+        "MB1c_CalibratedAdditiveMarkov_d=$lamp_d" =>
+            CalibratedAdditiveMarkov(0.5, alphabet, p; d = lamp_d, strength = 0.75),
         "MB2_OnOffMarkov_regimes=2_Lmin=10" =>
             OnOffMarkov(1.5, alphabet, [P_iid, P_persistent], switch; L_min = 10.0),
         "MB3_FSS_streams=$k" => FSS(1.5, alphabet; rates = p),
         "MB4_HawkesSymbol_d=$lamp_d" =>
             HawkesSymbol(0.6, alphabet; baseline = p, excitation = P_persistent,
                          d = lamp_d),
+        "MB5_DuplicationMutation_alpha=1.5" =>
+            DuplicationMutation(1.5, alphabet, p; mutation_probability = 0.02,
+                                max_block_length = 10_000),
     )
 end
 

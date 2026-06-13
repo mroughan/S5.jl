@@ -22,5 +22,7 @@ Additional knobs:
 - `S5_BENCHMARK_SECONDS=<seconds>` controls the per-benchmark time budget.
 
 The benchmark labels include complexity-relevant settings such as `k`, `d` for
-`LAMP` and `HawkesSymbol`, stream count for `FSS`, and FFT length behavior for
-`SpectralFGN`.
+history-based generators, stream count for `FSS`, copy-distance settings for
+`DuplicationMutation`, and FFT/rank-binning behavior for property-based methods.
+The factory API itself is intentionally thin and is covered by package tests;
+benchmarks measure generator hot paths after construction.

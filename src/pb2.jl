@@ -26,6 +26,15 @@ The marginal calibration is empirical: it adjusts offsets for the realised laten
 sample rather than solving the exact multivariate Gaussian choice probabilities.
 It gives practical marginal control while preserving the latent argmax mechanism.
 For exact finite-sample marginal counts, use [`SpectralFGN`](@ref).
+
+# Examples
+```julia
+julia> g = LGCM(0.8, [:a, :b], [0.4, 0.6]; calibration_iters = 3)
+LGCM{Vector{Symbol}, Vector{Float64}}(H=0.8, k=2)
+
+julia> length(generate(g, 128; rng = MersenneTwister(1)))
+128
+```
 """
 struct LGCM{A, M <: AbstractVector{<:Real}} <: LRDGenerator
     H                 :: Float64

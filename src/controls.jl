@@ -1,4 +1,6 @@
-target_marginal(g::Union{SpectralFGN,LGCM,LAMP,DyadicLAMP}) = copy(Float64.(g.marginal))
+target_marginal(g::Union{SpectralFGN,LGCM,IntermittentMapSymbols,
+                         LAMP,DyadicLAMP,CalibratedAdditiveMarkov,
+                         DuplicationMutation}) = copy(Float64.(g.marginal))
 function target_marginal(g::WaveletMarkov)
     p = zeros(Float64, length(g.alphabet))
     for (r, P) in enumerate(g.transition_matrices)
@@ -25,13 +27,19 @@ control_capabilities(::LGCM) =
     ControlCapabilities(:exact, :empirical, :induced, :induced, :latent_approximate)
 control_capabilities(::WaveletMarkov) =
     ControlCapabilities(:exact, :implied, :per_regime, :induced, :latent_approximate)
+control_capabilities(::IntermittentMapSymbols) =
+    ControlCapabilities(:exact, :finite_sample, :induced, :induced, :latent_empirical)
 control_capabilities(::LAMP) =
     ControlCapabilities(:exact, :innovation_target, :induced, :induced, :finite_history)
 control_capabilities(::DyadicLAMP) =
     ControlCapabilities(:exact, :innovation_target, :induced, :induced, :finite_history)
+control_capabilities(::CalibratedAdditiveMarkov) =
+    ControlCapabilities(:exact, :centered_target, :induced, :induced, :finite_history)
 control_capabilities(::OnOffMarkov) =
     ControlCapabilities(:exact, :implied, :per_regime, :induced, :nominal)
 control_capabilities(::FSS) =
     ControlCapabilities(:exact, :asymptotic, :induced, :induced, :nominal)
 control_capabilities(::HawkesSymbol) =
     ControlCapabilities(:exact, :implied, :induced, :induced, :finite_history)
+control_capabilities(::DuplicationMutation) =
+    ControlCapabilities(:exact, :mutation_target, :induced, :induced, :empirical)

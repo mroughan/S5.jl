@@ -85,6 +85,28 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Audited manually downloaded paper references, distinguished exact, partial,
   and alternative matches in `paper/DOWNLOAD.mn`, and corrected stale reference
   metadata in the bibliography and README.
+- Expanded the paper bibliography's text and DNA application references, saved
+  additional open PDFs, and refreshed `paper/DOWNLOAD.mn` for remaining
+  application-focused sources.
+- Verified additional manually downloaded references, corrected the LAMP DOI,
+  added summaries for DNA/text application papers, and recorded candidate
+  future simulation-model families in the bibliography and TODO.
+- Added `IntermittentMapSymbols` (PB4), `CalibratedAdditiveMarkov` (MB1c),
+  and `DuplicationMutation` (MB5), with provenance metadata, tests,
+  benchmarks, validation coverage, and documentation.
+- Updated `ARCHITECTURE.md` to include PB4, MB1a/MB1b/MB1c, MB4, and MB5
+  in the stable generator taxonomy.
+- Regenerated LRD diagnostic SVG plots and log-binned plotting tables for the
+  expanded PB1-PB4 and MB1a-MB5 method set.
+- Revised MB5 `DuplicationMutation` to use a power-law copy-distance kernel
+  instead of uniformly selected source blocks with power-law block lengths,
+  after validation showed the earlier version produced nearly flat
+  autocorrelation.
+- Added the uniform factory API `method_ids`, `method_info`, and
+  `make_generator` so users can list methods, inspect standard parameters, and
+  construct standard generator cases through one entry point.
+- Expanded README, Documenter pages, validation notes, benchmark notes, and
+  public docstrings with updated factory, PB4, MB1c, MB4, and MB5 examples.
 
 ## [0.1.0] — 2026-06-04
 

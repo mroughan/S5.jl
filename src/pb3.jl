@@ -40,6 +40,17 @@ Symbol-level ACF and spectrum diagnostics only see this regime persistence when
 the regimes have different observable stationary symbol distributions. If every
 regime has the same stationary marginal, the latent multiscale process may be
 mostly hidden from one-hot symbol diagnostics.
+
+# Examples
+```julia
+julia> P1 = [0.9 0.1; 0.2 0.8];
+julia> P2 = [0.3 0.7; 0.6 0.4];
+julia> g = WaveletMarkov(0.8, [:a, :b], [P1, P2])
+WaveletMarkov{Vector{Symbol}, Vector{Float64}}(H=0.8, k=2, R=2, driver=spectral)
+
+julia> length(generate(g, 64; rng = MersenneTwister(1)))
+64
+```
 """
 struct WaveletMarkov{A, W <: AbstractVector{<:Real}} <: LRDGenerator
     H                   :: Float64
@@ -93,6 +104,13 @@ end
 
 Construct a [`WaveletMarkov`](@ref) generator from one [`MarkovSpec`](@ref) per
 latent regime. All specifications must use the same ordered alphabet.
+
+# Examples
+```julia
+julia> spec = MarkovSpec([:a, :b], [0.9 0.1; 0.2 0.8]);
+julia> WaveletMarkov(0.8, [spec, spec])
+WaveletMarkov{Vector{Symbol}, Vector{Float64}}(H=0.8, k=2, R=2, driver=spectral)
+```
 """
 function WaveletMarkov(H::Real, specs::AbstractVector{<:MarkovSpec};
                        regime_weights::AbstractVector{<:Real} =
