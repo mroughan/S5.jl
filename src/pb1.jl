@@ -94,6 +94,13 @@ Builds the target power spectrum S(f) ∝ |f|^(1−2H) on the DFT grid, fills wi
 scaled complex Gaussian noise with Hermitian symmetry, then inverse-FFTs.
 Output is normalised to zero mean and unit standard deviation.
 Requires `n ≥ 4`.
+
+# Examples
+```julia
+julia> x = S5._fgn_spectral(8, 0.75, MersenneTwister(1));
+julia> length(x), round(mean(x); digits = 12)
+(8, 0.0)
+```
 """
 function _fgn_spectral(n::Int, H::Float64, rng::AbstractRNG)
     n ≥ 4 || throw(ArgumentError("n must be ≥ 4, got $n"))

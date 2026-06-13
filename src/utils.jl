@@ -3,6 +3,14 @@
 
 Convert `p` to `Vector{Float64}` and check that it is finite, non-negative,
 non-empty, and sums to one.
+
+# Examples
+```julia
+julia> validate_probability_vector([0.25, 0.75])
+2-element Vector{Float64}:
+ 0.25
+ 0.75
+```
 """
 function validate_probability_vector(p::AbstractVector{<:Real},
                                      name::AbstractString = "probabilities")
@@ -22,6 +30,14 @@ end
 
 Convert `x` to `Vector{Float64}` and check that it is finite, positive, and
 non-empty.
+
+# Examples
+```julia
+julia> validate_positive_vector([2, 3])
+2-element Vector{Float64}:
+ 2.0
+ 3.0
+```
 """
 function validate_positive_vector(x::AbstractVector{<:Real},
                                   name::AbstractString = "values")
@@ -36,6 +52,14 @@ end
     validate_alphabet(alphabet) -> alphabet
 
 Check that `alphabet` is non-empty and contains no duplicate entries.
+
+# Examples
+```julia
+julia> validate_alphabet([:a, :b])
+2-element Vector{Symbol}:
+ :a
+ :b
+```
 """
 function validate_alphabet(alphabet)
     length(alphabet) ≥ 1 || throw(ArgumentError("alphabet must be non-empty"))
@@ -53,6 +77,15 @@ possible to `marginal`.
 The counts are obtained by flooring `n .* marginal` and distributing the
 remaining observations to the largest fractional remainders. Ties are broken by
 alphabet order, which makes the result deterministic.
+
+# Examples
+```julia
+julia> bin_counts([0.2, 0.3, 0.5], 10)
+3-element Vector{Int64}:
+ 2
+ 3
+ 5
+```
 """
 function bin_counts(marginal::AbstractVector{<:Real}, n::Int)
     n ≥ 0 || throw(ArgumentError("n must be non-negative, got $n"))
@@ -134,6 +167,14 @@ end
     target_marginal(g) -> Vector{Float64}
 
 Return the marginal probabilities a generator claims to target.
+
+# Examples
+```julia
+julia> target_marginal(SpectralFGN(0.8, [:a, :b], [0.25, 0.75]))
+2-element Vector{Float64}:
+ 0.25
+ 0.75
+```
 """
 target_marginal(g::LRDGenerator) =
     throw(MethodError(target_marginal, (g,)))
@@ -142,6 +183,14 @@ target_marginal(g::LRDGenerator) =
     empirical_marginal(seq, alphabet) -> Vector{Float64}
 
 Estimate the marginal distribution of `seq` over `alphabet`.
+
+# Examples
+```julia
+julia> empirical_marginal([:a, :b, :b, :a], [:a, :b])
+2-element Vector{Float64}:
+ 0.5
+ 0.5
+```
 """
 function empirical_marginal(seq::AbstractVector, alphabet)
     validate_alphabet(alphabet)
@@ -160,6 +209,14 @@ end
 
 Estimate row-normalised bigram transition probabilities over `alphabet`.
 Rows with no observations are left as zeros.
+
+# Examples
+```julia
+julia> empirical_bigram([:a, :b, :b, :a], [:a, :b])
+2×2 Matrix{Float64}:
+ 0.0  1.0
+ 0.5  0.5
+```
 """
 function empirical_bigram(seq::AbstractVector, alphabet)
     validate_alphabet(alphabet)
@@ -186,6 +243,15 @@ end
 
 Estimate trigram probabilities `P(X[t+2] | X[t], X[t+1])` over `alphabet`.
 Slices with no observations are left as zeros.
+
+# Examples
+```julia
+julia> T = empirical_trigram([:a, :b, :a, :b], [:a, :b]);
+julia> T[1, 2, :]
+2-element Vector{Float64}:
+ 1.0
+ 0.0
+```
 """
 function empirical_trigram(seq::AbstractVector, alphabet)
     validate_alphabet(alphabet)
@@ -212,6 +278,12 @@ end
     total_variation(p, q) -> Float64
 
 Return the total variation distance between two probability arrays.
+
+# Examples
+```julia
+julia> total_variation([0.25, 0.75], [0.5, 0.5])
+0.25
+```
 """
 function total_variation(p::AbstractArray{<:Real}, q::AbstractArray{<:Real})
     size(p) == size(q) ||
@@ -223,6 +295,14 @@ end
     rowwise_total_variation(observed, target) -> Vector{Float64}
 
 Return total variation distance for each row of two transition matrices.
+
+# Examples
+```julia
+julia> rowwise_total_variation([0.5 0.5; 0.0 1.0], [1.0 0.0; 0.0 1.0])
+2-element Vector{Float64}:
+ 0.5
+ 0.0
+```
 """
 function rowwise_total_variation(observed::AbstractMatrix{<:Real},
                                  target::AbstractMatrix{<:Real})
@@ -237,6 +317,14 @@ end
 
 Convert `P` to a dense `Matrix{Float64}` and check that it is square,
 finite, non-negative, non-empty, and row-stochastic.
+
+# Examples
+```julia
+julia> validate_transition_matrix([0.8 0.2; 0.1 0.9])
+2×2 Matrix{Float64}:
+ 0.8  0.2
+ 0.1  0.9
+```
 """
 function validate_transition_matrix(P::AbstractMatrix{<:Real},
                                     name::AbstractString = "transition_matrix")
@@ -267,6 +355,14 @@ end
 
 Return a stationary distribution for a row-stochastic transition matrix using
 power iteration.
+
+# Examples
+```julia
+julia> round.(stationary_distribution([0.8 0.2; 0.1 0.9]); digits = 3)
+2-element Vector{Float64}:
+ 0.333
+ 0.667
+```
 """
 function stationary_distribution(P::AbstractMatrix{<:Real};
                                  maxiter::Int = 10_000,

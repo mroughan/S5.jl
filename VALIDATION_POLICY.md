@@ -40,6 +40,11 @@ replicates, and write only aggregate outputs unless generated sequences are need
 for a documented diagnostic. Large generated sequences should stay out of version
 control.
 
+Validation scripts may use `make_generator` for smoke tests of standard cases,
+but studies that support method-specific claims should prefer explicit
+constructors so the scientific parameters and assumptions remain visible in the
+script.
+
 ### Large Validation Flags
 
 Long-running studies should expose keyword arguments and environment-variable

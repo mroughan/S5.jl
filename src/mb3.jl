@@ -124,6 +124,12 @@ end
 
 Draw from a Pareto distribution with shape `alpha` and scale `x_min` using
 Distributions.jl.
+
+# Examples
+```julia
+julia> S5._pareto_sample(MersenneTwister(1), 1.4, 1.0) >= 1.0
+true
+```
 """
 @inline function _pareto_sample(rng::AbstractRNG, alpha::Float64, x_min::Float64)
     return rand(rng, Pareto(alpha, x_min))

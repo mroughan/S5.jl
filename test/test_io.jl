@@ -71,6 +71,27 @@ import IncCSV
         end
     end
 
+    @testset "CalibratedAdditiveMarkov round-trip" begin
+        mktempdir() do dir
+            g = CalibratedAdditiveMarkov(0.5, [:x, :y]; d = 50, strength = 0.7)
+            seq = generate(g, 80; rng = StableRNG(13))
+            path = joinpath(dir, "mb1c.inc")
+            save_sequence(path, seq, g)
+
+            inc = IncCSV.readinc(path)
+            meta = IncCSV.metadata(inc)
+            @test meta["generator"] == "CalibratedAdditiveMarkov"
+            @test meta["method"] == "MB1c"
+            @test meta["n"] == 80
+
+            gp = meta["generator_params"]
+            @test gp["beta"] == "0.5"
+            @test gp["d"] == 50
+            @test gp["strength"] == "0.7"
+            @test gp["memory_function"] == "centered additive power law"
+        end
+    end
+
     @testset "LGCM round-trip" begin
         mktempdir() do dir
             g    = LGCM(0.8, [:a, :b], [0.25, 0.75]; calibration_iters = 4)
@@ -109,6 +130,26 @@ import IncCSV
             @test gp["H"] == "0.8"
             @test gp["n_regimes"] == 2
             @test gp["driver"] == "spectral"
+        end
+    end
+
+    @testset "IntermittentMapSymbols round-trip" begin
+        mktempdir() do dir
+            g = IntermittentMapSymbols(1.6, [:a, :b], [0.4, 0.6]; burnin = 10)
+            seq = generate(g, 80; rng = StableRNG(26))
+            path = joinpath(dir, "pb4.inc")
+            save_sequence(path, seq, g)
+
+            inc = IncCSV.readinc(path)
+            meta = IncCSV.metadata(inc)
+            @test meta["generator"] == "IntermittentMapSymbols"
+            @test meta["method"] == "PB4"
+            @test meta["n"] == 80
+
+            gp = meta["generator_params"]
+            @test gp["z"] == "1.6"
+            @test gp["burnin"] == 10
+            @test gp["latent_driver"] == "Pomeau-Manneville-style intermittent map"
         end
     end
 
@@ -170,6 +211,27 @@ import IncCSV
             @test gp["beta"] == "0.6"
             @test gp["d"] == 40
             @test gp["time_model"] == "discrete"
+        end
+    end
+
+    @testset "DuplicationMutation round-trip" begin
+        mktempdir() do dir
+            g = DuplicationMutation(1.5, [:a, :b]; mutation_probability = 0.02,
+                                    seed_length = 8, max_block_length = 50)
+            seq = generate(g, 80; rng = StableRNG(45))
+            path = joinpath(dir, "mb5.inc")
+            save_sequence(path, seq, g)
+
+            inc = IncCSV.readinc(path)
+            meta = IncCSV.metadata(inc)
+            @test meta["generator"] == "DuplicationMutation"
+            @test meta["method"] == "MB5"
+            @test meta["n"] == 80
+
+            gp = meta["generator_params"]
+            @test gp["alpha"] == "1.5"
+            @test gp["mutation_probability"] == "0.02"
+            @test gp["growth_model"] == "power-law lag copy-and-mutate growth"
         end
     end
 

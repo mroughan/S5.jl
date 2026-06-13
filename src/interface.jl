@@ -6,6 +6,12 @@ Abstract supertype for all LRD symbol-sequence generators in S5.jl.
 Concrete subtypes must implement:
 
     generate(g::MyGenerator, n::Int; rng::AbstractRNG = Random.default_rng()) -> Vector
+
+# Examples
+```julia
+julia> SpectralFGN(0.8, [:a, :b]) isa LRDGenerator
+true
+```
 """
 abstract type LRDGenerator end
 
@@ -17,6 +23,12 @@ Abstract supertype for explicit local-structure specifications.
 `MarkovSpec` is the current concrete first-order specification. Future higher-order
 specifications, such as sparse trigram controls, should subtype
 `LocalStructureSpec` and define [`local_structure_order`](@ref).
+
+# Examples
+```julia
+julia> MarkovSpec([:a, :b], [0.9 0.1; 0.2 0.8]) isa LocalStructureSpec
+true
+```
 """
 abstract type LocalStructureSpec end
 
@@ -95,6 +107,13 @@ Fields use stable symbolic levels:
 - `bigram`: `:per_regime` or `:induced`
 - `trigram`: `:induced`
 - `lrd`: `:approximate`, `:latent_approximate`, `:finite_history`, or `:nominal`
+
+# Examples
+```julia
+julia> caps = control_capabilities(SpectralFGN(0.8, [:a, :b]));
+julia> caps.alphabet, caps.marginal
+(:exact, :finite_sample)
+```
 """
 struct ControlCapabilities
     alphabet :: Symbol

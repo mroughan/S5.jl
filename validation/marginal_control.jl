@@ -55,12 +55,19 @@ function run_marginal_control(; ns = (1_000, 5_000),
         ("SpectralFGN", (p, alphabet) -> SpectralFGN(0.8, alphabet, p)),
         ("LGCM", (p, alphabet) -> LGCM(0.8, alphabet, p; calibration_iters = 8)),
         ("WaveletMarkov", (p, alphabet) -> _iid_wavelet_markov(p, alphabet)),
+        ("IntermittentMapSymbols", (p, alphabet) ->
+            IntermittentMapSymbols(1.6, alphabet, p; burnin = 100)),
         ("LAMP", (p, alphabet) -> LAMP(0.5, alphabet, p; d = 200, epsilon = 0.05)),
         ("DyadicLAMP", (p, alphabet) -> DyadicLAMP(0.5, alphabet, p;
                                                    d = 10_000, epsilon = 0.05)),
+        ("CalibratedAdditiveMarkov", (p, alphabet) ->
+            CalibratedAdditiveMarkov(0.5, alphabet, p; d = 200, strength = 0.0)),
         ("OnOffMarkov", (p, alphabet) -> _iid_onoff_markov(p, alphabet)),
         ("FSS", (p, alphabet) -> FSS(1.5, alphabet; rates = p)),
         ("HawkesSymbol", (p, alphabet) -> _baseline_hawkes_symbol(p, alphabet)),
+        ("DuplicationMutation", (p, alphabet) ->
+            DuplicationMutation(1.5, alphabet, p; mutation_probability = 1.0,
+                                seed_length = 32, max_block_length = 100)),
     ]
 
     for k in ks

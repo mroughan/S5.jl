@@ -13,7 +13,8 @@ research backlog remains in `TODO.md`.
 ## Goals
 
 - Provide a small, consistent Julia API for generating symbolic LRD sequences.
-- Preserve six clearly identified synthesis methods: PB1-PB3 and MB1-MB3.
+- Preserve the clearly identified synthesis methods PB1-PB4 and MB1-MB5,
+  including MB1a/MB1b/MB1c variants for additive history models.
 - State and test what each generator controls, including its alphabet, marginal
   distribution, local structure, and nominal LRD parameter.
 - Make stochastic results reproducible when callers supply an explicit random
@@ -76,6 +77,9 @@ method differences merely to make APIs look uniform.
 
 - `src/S5.jl` defines the module, exports, dependency imports, and include order.
 - `src/interface.jl` defines `LRDGenerator` and the common `generate` interface.
+- `src/factory.jl` defines the uniform method-discovery and standard-case
+  construction helpers; it is additive convenience, not a replacement for the
+  method-specific constructors.
 - `src/controls.jl` reports each generator's declared target marginal.
 - `src/io.jl` owns stable sequence serialization and provenance metadata.
 - `src/utils.jl` contains shared validation, sampling, quantization, and
@@ -96,9 +100,14 @@ constructor validation and generation algorithm:
 | Property-based | PB1 | `SpectralFGN` | `src/pb1.jl` |
 | Property-based | PB2 | `LGCM` | `src/pb2.jl` |
 | Property-based | PB3 | `WaveletMarkov` | `src/pb3.jl` |
-| Model-based | MB1 | `LAMP` | `src/mb1.jl` |
+| Property-based | PB4 | `IntermittentMapSymbols` | `src/pb4.jl` |
+| Model-based | MB1a | `LAMP` | `src/mb1.jl` |
+| Model-based | MB1b | `DyadicLAMP` | `src/mb1.jl` |
+| Model-based | MB1c | `CalibratedAdditiveMarkov` | `src/mb5.jl` |
 | Model-based | MB2 | `OnOffMarkov` | `src/mb2.jl` |
 | Model-based | MB3 | `FSS` | `src/mb3.jl` |
+| Model-based | MB4 | `HawkesSymbol` | `src/mb4.jl` |
+| Model-based | MB5 | `DuplicationMutation` | `src/mb5.jl` |
 
 Generator implementations may use private shared helpers, but a generator's
 scientific mechanism should remain legible in its own file. A new generator
@@ -170,7 +179,9 @@ Use this sequence for changes:
 - Put broad grids, many replicates, plots, and exploratory diagnostics in
   `validation/`.
 - Keep raw or generated data untouched when it is retained. Record provenance
-  for external data and reference material.
+  for external data and reference material. Prefer retaining aggregate
+  validation tables and plots over generated sequences unless sequence retention
+  is explicitly justified.
 - Treat validation failures as evidence to investigate, not merely thresholds to
   loosen.
 

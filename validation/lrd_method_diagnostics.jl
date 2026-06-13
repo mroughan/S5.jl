@@ -28,15 +28,25 @@ function generator_factories(alphabet)
             WaveletMarkov(0.8, alphabet, regime_matrices; driver = :haar)),
         ("PB3_WaveletMarkov_Spectral", () ->
             WaveletMarkov(0.8, alphabet, regime_matrices; driver = :spectral)),
+        ("PB4_IntermittentMapSymbols", () ->
+            IntermittentMapSymbols(1.6, alphabet, marginal; burnin = 1000)),
         ("MB1a_LAMP", () -> LAMP(0.4, alphabet, marginal; d = 200, epsilon = 0.02)),
         ("MB1b_DyadicLAMP", () -> DyadicLAMP(0.4, alphabet, marginal;
                                              d = 100_000, epsilon = 0.02)),
+        ("MB1c_CalibratedAdditiveMarkov", () ->
+            CalibratedAdditiveMarkov(0.4, alphabet, marginal; d = 200,
+                                     strength = 0.75)),
         ("MB2_OnOffMarkov", () -> OnOffMarkov(1.4, alphabet, regime_matrices, Q; L_min = 50.0)),
         ("MB3_FSS", () -> FSS(1.4, alphabet; rates = ones(k))),
         ("MB4_HawkesSymbol", () -> HawkesSymbol(0.4, alphabet;
             baseline = fill(1.0, k),
             excitation = 6.0 .* Matrix{Float64}(I, k, k),
             d = 20_000)),
+        ("MB5_DuplicationMutation", () ->
+            DuplicationMutation(1.4, alphabet, marginal;
+                                mutation_probability = 0.02,
+                                seed_length = 128,
+                                max_block_length = 20_000)),
     ]
 end
 
@@ -117,7 +127,9 @@ end
 
 intrinsic_lag_limit(g::LAMP) = g.d
 intrinsic_lag_limit(g::DyadicLAMP) = g.d
+intrinsic_lag_limit(g::CalibratedAdditiveMarkov) = g.d
 intrinsic_lag_limit(g::HawkesSymbol) = g.d
+intrinsic_lag_limit(g::DuplicationMutation) = g.max_block_length
 
 function acf_limit_annotations(g, n::Int)
     finite_limit = diagnostic_lag_limit(n)
@@ -150,9 +162,11 @@ function spectrum_limit_annotations(g, n::Int)
 end
 
 nominal_acf_decay_exponent(g::Union{SpectralFGN,LGCM,WaveletMarkov}) = 2 - 2g.H
-nominal_acf_decay_exponent(g::Union{LAMP,DyadicLAMP}) = g.beta
+nominal_acf_decay_exponent(g::IntermittentMapSymbols) = 2 - g.z
+nominal_acf_decay_exponent(g::Union{LAMP,DyadicLAMP,CalibratedAdditiveMarkov}) = g.beta
 nominal_acf_decay_exponent(g::Union{OnOffMarkov,FSS}) = g.alpha - 1
 nominal_acf_decay_exponent(g::HawkesSymbol) = g.beta
+nominal_acf_decay_exponent(g::DuplicationMutation) = g.alpha - 1
 
 function nominal_reference_line(x::AbstractVector{<:Real}, y::AbstractVector{<:Real};
                                 exponent::Real, label::AbstractString)
