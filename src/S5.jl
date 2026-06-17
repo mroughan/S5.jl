@@ -54,6 +54,10 @@ export LRDGenerator, generate, save_sequence
 export MethodInfo, method_ids, method_info, make_generator
 export LocalStructureSpec, MarkovSpec, local_structure_order
 export ControlCapabilities, control_capabilities
+export LatentSource, Symbolizer, PropertyBasedGenerator
+export SpectralFGNSource, HaarLRDSource, IntermittentMapSource
+export QuantileSymbolizer, ArgmaxSymbolizer, MarkovRegimeSymbolizer
+export latent_width, generate_latent, symbolize
 export SpectralFGN, LGCM, WaveletMarkov, IntermittentMapSymbols
 export LAMP, DyadicLAMP, CalibratedAdditiveMarkov, OnOffMarkov, FSS
 export HawkesSymbol, DuplicationMutation
@@ -68,6 +72,7 @@ include("pb1.jl")
 include("pb2.jl")
 include("pb3.jl")
 include("pb4.jl")
+include("property_based.jl")
 include("mb1.jl")
 include("mb2.jl")
 include("mb3.jl")

@@ -26,6 +26,18 @@ control_capabilities
 ## Property-based generators
 
 ```@docs
+LatentSource
+Symbolizer
+PropertyBasedGenerator
+SpectralFGNSource
+HaarLRDSource
+IntermittentMapSource
+QuantileSymbolizer
+ArgmaxSymbolizer
+MarkovRegimeSymbolizer
+latent_width
+generate_latent
+symbolize
 SpectralFGN
 LGCM
 WaveletMarkov

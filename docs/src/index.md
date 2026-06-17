@@ -34,6 +34,19 @@ The method-specific constructors remain the precise API when you need full
 control over transition matrices, excitation matrices, or other scientific
 settings. See [API](@ref) for the clean construction and testing workflow.
 
+Property-based methods also have a composable pathway:
+
+```julia
+source = SpectralFGNSource(0.8)
+symbolizer = QuantileSymbolizer(alphabet, [0.2, 0.3, 0.5])
+g = PropertyBasedGenerator(source, symbolizer)
+```
+
+This separates the numerical LRD source from the symbolic transformation. PB1,
+PB2, PB3, and PB4 are the standard combinations; the composable API is useful
+when validating how a different symbolization changes the inherited latent
+long-memory behavior.
+
 ## Generators
 
 | ID  | Type          | LRD mechanism                          | Short-range control        | Complexity      |

@@ -1,6 +1,7 @@
 target_marginal(g::Union{SpectralFGN,LGCM,IntermittentMapSymbols,
                          LAMP,DyadicLAMP,CalibratedAdditiveMarkov,
                          DuplicationMutation}) = copy(Float64.(g.marginal))
+target_marginal(g::PropertyBasedGenerator) = _target_marginal(g.symbolizer)
 function target_marginal(g::WaveletMarkov)
     p = zeros(Float64, length(g.alphabet))
     for (r, P) in enumerate(g.transition_matrices)
@@ -29,6 +30,10 @@ control_capabilities(::WaveletMarkov) =
     ControlCapabilities(:exact, :implied, :per_regime, :induced, :latent_approximate)
 control_capabilities(::IntermittentMapSymbols) =
     ControlCapabilities(:exact, :finite_sample, :induced, :induced, :latent_empirical)
+control_capabilities(g::PropertyBasedGenerator) =
+    ControlCapabilities(:exact, _symbolizer_marginal_capability(g.symbolizer),
+                        _symbolizer_bigram_capability(g.symbolizer), :induced,
+                        :latent_empirical)
 control_capabilities(::LAMP) =
     ControlCapabilities(:exact, :innovation_target, :induced, :induced, :finite_history)
 control_capabilities(::DyadicLAMP) =

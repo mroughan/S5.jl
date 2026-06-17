@@ -103,8 +103,33 @@ points; the explicit constructors below remain the full-control API.
 
 ### Property-Based Methods
 
-These generate an underlying numerical LRD process and then map it to symbols.
-The LRD property is inherited from the numerical layer.
+These generate one or more underlying numerical LRD processes and then map them
+to symbols. In code, this can now be expressed directly as a composition of a
+`LatentSource` and a `Symbolizer`:
+
+```julia
+source = SpectralFGNSource(0.8)
+symbolizer = QuantileSymbolizer([:a, :b, :c], [0.2, 0.3, 0.5])
+g = PropertyBasedGenerator(source, symbolizer)
+seq = generate(g, 10_000; rng = StableRNG(42))
+```
+
+The named PB methods remain the standard, documented cases. The composable API
+makes the latent-source/symbolization split explicit, while still checking
+compatibility at construction time. For example, a quantile symbolizer needs one
+latent series, an argmax symbolizer needs one latent series per symbol, and an
+intermittent-map source is currently single-stream only.
+
+| Named method | Latent source | Symbolizer |
+|--------------|---------------|------------|
+| PB1 | `SpectralFGNSource` | `QuantileSymbolizer` |
+| PB2 | `SpectralFGNSource` | `ArgmaxSymbolizer` |
+| PB3 | `SpectralFGNSource` or `HaarLRDSource` | `MarkovRegimeSymbolizer` |
+| PB4 | `IntermittentMapSource` | `QuantileSymbolizer` |
+
+The LRD property is inherited from the numerical layer, then altered by the
+symbolization step. Validation therefore reports the behavior of the full
+composition, not just the latent process.
 
 | ID | Name | LRD mechanism | Short-range control | Complexity | Novel? |
 |----|------|---------------|---------------------|------------|--------|

@@ -105,6 +105,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added the uniform factory API `method_ids`, `method_info`, and
   `make_generator` so users can list methods, inspect standard parameters, and
   construct standard generator cases through one entry point.
+- Added a composable property-based API with `LatentSource`, `Symbolizer`, and
+  `PropertyBasedGenerator`, plus spectral, Haar, intermittent-map, quantile,
+  argmax, and Markov-regime building blocks for mix-and-match PB studies.
 - Expanded README, Documenter pages, validation notes, benchmark notes, and
   public docstrings with updated factory, PB4, MB1c, MB4, and MB5 examples.
 - Reorganized Documenter documentation into `Home`, `API`, `Validation and
@@ -113,6 +116,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Verified five additional downloaded references, updated `paper/DOWNLOAD.mn`,
   and expanded the annotated bibliography with source-matched summaries plus a
   model-details section mapping literature models to S5.jl adaptations.
+- Moved downloaded reference papers out of the public repository into the
+  private sibling repository `../S4_downloads/`, removed public Git history for
+  `paper/downloads/` and `paper/references/`, and ignored those paths going
+  forward.
 
 ## [0.1.0] — 2026-06-04
 

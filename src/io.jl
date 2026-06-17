@@ -147,6 +147,31 @@ function _build_metadata(gen::IntermittentMapSymbols, n::Int, created::String)
     )
 end
 
+function _build_metadata(gen::PropertyBasedGenerator, n::Int, created::String)
+    sym = gen.symbolizer
+    alp = join(string.(_symbolizer_alphabet(sym)), ",")
+    Dict(
+        "title"     => "S5.jl synthetic LRD symbol sequence",
+        "package"   => "S5",
+        "version"   => string(pkgversion(@__MODULE__)),
+        "created"   => created,
+        "n"         => n,
+        "generator" => "PropertyBasedGenerator",
+        "method"    => "PB-composed",
+        "generator_params" => Dict(
+            "source"        => string(nameof(typeof(gen.source))),
+            "symbolizer"    => string(nameof(typeof(sym))),
+            "latent_width"  => latent_width(sym),
+            "alphabet_size" => length(_symbolizer_alphabet(sym)),
+            "alphabet"      => alp,
+        ),
+        "columns" => Dict(
+            "index"  => "time index (1-based)",
+            "symbol" => "generated symbol from the alphabet",
+        ),
+    )
+end
+
 function _build_metadata(gen::LAMP, n::Int, created::String)
     k   = length(gen.alphabet)
     alp = join(string.(gen.alphabet), ",")

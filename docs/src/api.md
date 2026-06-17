@@ -3,6 +3,8 @@
 S5.jl has two public construction paths:
 
 - use `make_generator` for standard, named cases across all implemented methods;
+- compose a `LatentSource` with a `Symbolizer` for property-based studies that
+  need to vary the numerical driver and the symbolization rule separately;
 - use the method-specific constructors when a study needs full control of the
   scientific parameters.
 
@@ -86,6 +88,77 @@ Common keywords are shared where they mean the same thing:
 - `H`, `beta`, `alpha`, or `z` select the method's nominal LRD-related
   parameter;
 - `d` sets an explicit finite history cutoff for history-based methods.
+
+## Composable Property-Based API
+
+Property-based generators can be described as:
+
+```julia
+PropertyBasedGenerator(source, symbolizer)
+```
+
+The `source` creates one or more numerical latent LRD series. The `symbolizer`
+turns those latent values into categorical symbols. This split makes the PB
+taxonomy explicit: PB1, PB2, PB3, and PB4 are standard combinations rather than
+unrelated mechanisms.
+
+```julia
+using S5, StableRNGs
+
+source = SpectralFGNSource(0.8)
+symbolizer = QuantileSymbolizer([:a, :b, :c], [0.2, 0.3, 0.5])
+g = PropertyBasedGenerator(source, symbolizer)
+
+generate(g, 8; rng = StableRNG(42))
+```
+
+Example output:
+
+```julia
+8-element Vector{Symbol}:
+ :a
+ :c
+ :b
+ :c
+ :c
+ :a
+ :c
+ :b
+```
+
+Available latent sources are:
+
+| Source | Latent behavior | Width |
+|--------|-----------------|-------|
+| `SpectralFGNSource(H)` | approximate spectral fGn | any positive width |
+| `HaarLRDSource(H)` | Haar-like multiscale driver | any positive width |
+| `IntermittentMapSource(z)` | intermittent-map dynamics | one stream |
+
+Available symbolizers are:
+
+| Symbolizer | Transformation | Required width |
+|------------|----------------|----------------|
+| `QuantileSymbolizer` | rank-bin one latent stream to target counts | 1 |
+| `ArgmaxSymbolizer` | choose the largest offset latent stream | alphabet size |
+| `MarkovRegimeSymbolizer` | rank-bin one latent stream to Markov regimes | 1 |
+
+Some combinations are intentionally invalid. For example,
+`IntermittentMapSource` cannot feed `ArgmaxSymbolizer`, because the intermittent
+map source currently produces only one latent stream and argmax symbolization
+needs one stream per symbol.
+
+PB3's regime construction can also be built directly:
+
+```julia
+P1 = [0.95 0.05; 0.10 0.90]
+P2 = [0.30 0.70; 0.70 0.30]
+source = HaarLRDSource(0.8)
+symbolizer = MarkovRegimeSymbolizer([:a, :b], [P1, P2])
+g = PropertyBasedGenerator(source, symbolizer)
+```
+
+Use the composable API when the study is about transformations. Use
+`make_generator` when the study only needs a standard named method.
 
 ## Explicit Constructors
 
