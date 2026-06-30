@@ -1,13 +1,13 @@
-# S5.jl Architecture
+# SymbolicLongMemorySequences.jl Architecture
 
 ## Purpose
 
-S5.jl synthesizes long-range-dependent (LRD) sequences over finite, ordered
+SymbolicLongMemorySequences.jl synthesizes long-range-dependent (LRD) sequences over finite, ordered
 alphabets. It provides reproducible generators with explicit control contracts
 and provenance, rather than claiming that every generator controls every
 statistical property.
 
-This document defines the stable development pathway for S5.jl. The current
+This document defines the stable development pathway for SymbolicLongMemorySequences.jl. The current
 research backlog remains in `TODO.md`.
 
 ## Goals
@@ -27,13 +27,13 @@ research backlog remains in `TODO.md`.
 
 ## Non-Goals
 
-- S5.jl is not an LRD estimator package. Spectral, wavelet, Whittle,
+- SymbolicLongMemorySequences.jl is not an LRD estimator package. Spectral, wavelet, Whittle,
   recurrence-time, Hill, and count-variance estimators belong elsewhere.
-- S5.jl does not promise exact recovery of a requested Hurst parameter from a
+- SymbolicLongMemorySequences.jl does not promise exact recovery of a requested Hurst parameter from a
   finite sequence or from a particular estimator.
-- S5.jl does not provide one universal control interface that suggests all
+- SymbolicLongMemorySequences.jl does not provide one universal control interface that suggests all
   generators can prescribe arbitrary marginals, bigrams, or trigrams.
-- S5.jl is not a general time-series, language-modeling, plotting, or data-frame
+- SymbolicLongMemorySequences.jl is not a general time-series, language-modeling, plotting, or data-frame
   toolkit.
 - The fast test suite is not a substitute for Monte Carlo validation or
   scientific review.
@@ -75,7 +75,7 @@ method differences merely to make APIs look uniform.
 
 ### Public Package Layer
 
-- `src/S5.jl` defines the module, exports, dependency imports, and include order.
+- `src/SymbolicLongMemorySequences.jl` defines the module, exports, dependency imports, and include order.
 - `src/interface.jl` defines `LRDGenerator` and the common `generate` interface.
 - `src/factory.jl` defines the uniform method-discovery and standard-case
   construction helpers; it is additive convenience, not a replacement for the
@@ -85,7 +85,7 @@ method differences merely to make APIs look uniform.
 - `src/utils.jl` contains shared validation, sampling, quantization, and
   empirical-control helpers.
 
-The exported names in `src/S5.jl`, constructor signatures, generated sequence
+The exported names in `src/SymbolicLongMemorySequences.jl`, constructor signatures, generated sequence
 element types, accepted parameter domains, and INC metadata fields are public
 contracts. Changes to them require explicit compatibility consideration,
 documentation, tests, and a changelog entry.

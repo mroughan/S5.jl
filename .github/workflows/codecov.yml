@@ -24,7 +24,7 @@ jobs:
           version: '1'
       - uses: julia-actions/cache@v2
       - name: Add unregistered dependency
-        run: julia --project=. -e 'using Pkg; Pkg.add(url="https://github.com/mroughan/IncCSV.jl")'
+        run: julia --project=. -e 'using Pkg; Pkg.add(url="https://github.com/mroughan/SymbolicLongMemorySequences.jl")'
       - uses: julia-actions/julia-runtest@v1
       - uses: julia-actions/julia-processcoverage@v1
       - uses: codecov/codecov-action@v7

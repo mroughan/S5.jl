@@ -14,7 +14,7 @@ edit `ARCHITECTURE.md` or this file unless the user explicitly asks.
 
 ## Project Direction
 
-S5.jl is a focused Julia package for synthesizing LRD symbolic sequences. Keep
+SymbolicLongMemorySequences.jl is a focused Julia package for synthesizing LRD symbolic sequences. Keep
 estimation methods outside this repository. Preserve honest distinctions between
 exact, empirical, asymptotic, latent, and nominal statistical claims.
 
@@ -62,7 +62,7 @@ The stable pathway is:
 
 ## Repository Map
 
-- `src/S5.jl`: module, exports, includes
+- `src/SymbolicLongMemorySequences.jl`: module, exports, includes
 - `src/interface.jl`: common generator interface
 - `src/pb*.jl`, `src/mb*.jl`: synthesis implementations
 - `src/controls.jl`: declared target marginals
